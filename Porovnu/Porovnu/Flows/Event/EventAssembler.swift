@@ -6,16 +6,18 @@
 //
 
 protocol EventAssembler {
-    func resolveEventView(event: Event) -> EventView
-    func resolve(event: Event) -> EventViewModel
+    func resolveEventView(viewModel: EventViewModel) -> EventView
+    func resolveEventViewModel(event: Event, assembler: SpendingAssembler) -> EventViewModel
 }
 
 extension EventAssembler {
-    func resolveEventView(event: Event) -> EventView {
-        EventView(viewModel: resolve(event: event))
+    func resolveEventView(viewModel: EventViewModel) -> EventView {
+        EventView(viewModel: viewModel)
     }
+}
 
-    func resolve(event: Event) -> EventViewModel {
-        EventViewModel(event: event)
+extension EventAssembler where Self: DefaultAssembler {
+    func resolveEventViewModel(event: Event, assembler: SpendingAssembler) -> EventViewModel {
+        EventViewModel(event: event, assembler: assembler, dataBaseManager: resolveDataBaseManager())
     }
 }

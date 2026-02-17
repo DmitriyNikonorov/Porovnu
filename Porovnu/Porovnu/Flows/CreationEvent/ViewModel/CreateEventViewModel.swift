@@ -8,67 +8,66 @@
 import SwiftUI
 import SwiftData
 
+struct ContributorShort: Identifiable {
+    let id = UUID()
+    var name: String
+}
+
+extension Collection {
+    var isNotEmpty: Bool {
+        !isEmpty
+    }
+}
+
+
 @Observable
 final class CreateEventViewModel: ViewModel {
-    var eventName = ""
-    var contributorsNames: [String] = [""]
 
-    var modelContainer: ModelContainer?
-    var modelContext: ModelContext?
+    private var dataBaseManager: DataBaseManagerProtocol
+    var eventName = String()
+    var contributors: [ContributorShort] = [ContributorShort(name: "")]
 
-    override init() {
+    init(dataBaseManager: DataBaseManagerProtocol) {
+        self.dataBaseManager = dataBaseManager
         super.init()
-        setupModelContainer()
     }
 
-    func createEvent() -> Event {
-        let contributors = contributorsNames
+    func createEvent() -> Event? {
+        let contributors = contributors
             .filter {
-                !$0.isEmpty
+                !$0.name.isEmpty
             }
             .map {
-                Contributor(name: $0, spendings: [])
+                Contributor(name: $0.name.trim(), spendings: [])
             }
+
+        guard
+            contributors.isNotEmpty,
+            eventName.isNotEmpty
+        else {
+            return nil
+        }
 
         let event = Event(
             name: eventName,
             contributors: contributors
         )
-        saveModel(model: event)
+
+        dataBaseManager.save(EventModel(event: event))
         return event
     }
 
+    func deleteContributor(at index: Int) {
+        guard canDeleteContributor(at: index) else { return }
 
-
-    private func setupModelContainer() {
-        do {
-            let schema = Schema([
-                EventModel.self,
-                ContributorModel.self,
-                SpendingModel.self,
-                HolderModel.self
-            ])
-            let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-            modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
-
-            if let container = modelContainer {
-                modelContext = ModelContext(container)
-            }
-        } catch {
-            debugPrint("Failed to create model container: \(error)")
-        }
+        contributors.remove(at: index)
     }
 
-    func saveModel(model: Event) {
-        do {
-            modelContext?.insert(EventModel(event: model))
-            try modelContext?.save()
-            print("✅ save event in database")
-        } catch {
-            print(error)
-        }
+    func addContributor() {
+        contributors.append(ContributorShort(name: ""))
+    }
+
+    func canDeleteContributor(at index: Int) -> Bool {
+        return contributors.count > 1
     }
 }
-
-
-

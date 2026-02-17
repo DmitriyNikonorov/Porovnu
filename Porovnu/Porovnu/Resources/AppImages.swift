@@ -12,20 +12,40 @@ enum AppImages {
     case personBadgePlus
     case homeTab
     case profileTab
+    case editPencil
+    case listClipboard
+    case trash
+
+    var sring: String {
+            switch self {
+            case .person2Fill:
+                "person.2.fill"
+
+            case .personBadgePlus:
+                "person.badge.plus"
+
+            case .homeTab:
+                "house"
+
+            case .profileTab:
+                "person"
+
+            case .editPencil:
+                "square.and.pencil"
+
+            case .listClipboard:
+                "list.bullet.clipboard"
+
+            case .trash:
+                "trash"
+            }
+    }
 
     var image: Image {
         switch self {
-        case .person2Fill:
-            Image(systemName: "person.2.fill")
-            
-        case .personBadgePlus:
-            Image(systemName: "person.badge.plus")
-
-        case .homeTab:
-            Image(systemName: "house")
-
-        case .profileTab:
-            Image(systemName: "person")
+//        case .person2Fill, .personBadgePlus, .homeTab, .profileTab, .editPencil, .listClipboard, .trash:
+        default:
+            Image(systemName: sring)
         }
     }
 

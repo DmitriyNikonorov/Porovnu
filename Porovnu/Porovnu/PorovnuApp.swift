@@ -10,37 +10,37 @@ import SwiftData
 
 @main
 struct PorovnuApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            EventModel.self,
-            ContributorModel.self,
-            SpendingModel.self,
-            HolderModel.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+//    var sharedModelContainer: ModelContainer = {
+//        let schema = Schema([
+//            EventModel.self,
+//            ContributorModel.self,
+//            SpendingModel.self,
+//            HolderModel.self
+//        ])
+//        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+//
+//        do {
+//            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+//        } catch {
+//            fatalError("Could not create ModelContainer: \(error)")
+//        }
+//    }()
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
 
+    private let assembler = DefaultAssembler.shared
     private var navigationCoordinator = NavigationCoordinator()
-    private let assembler = DefaultAssembler()
 
     var body: some Scene {
         WindowGroup {
             Group {
                 if #available(iOS 26.0, *) {
-                    NativeTabView(assembler: assembler)
+                    NativeTabBarView(assembler: assembler)
 
                 } else {
-                    CustomTabView(assembler: assembler)
+                    CustomTabBarView(assembler: assembler)
                 }
             }
-            .modelContainer(sharedModelContainer)
-            .environmentObject(navigationCoordinator)
+            .environment(navigationCoordinator)
         }
     }
 }

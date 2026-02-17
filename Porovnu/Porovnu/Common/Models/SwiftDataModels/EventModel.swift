@@ -15,7 +15,7 @@ final class EventModel {
 
     var name: String
 
-    @Relationship(deleteRule: .nullify)
+    @Relationship(deleteRule: .nullify, inverse: \ContributorModel.events)
     var contributors: [ContributorModel] = []
 
     init(id: UUID = UUID(), name: String, contributors: [ContributorModel]) {
@@ -38,10 +38,10 @@ final class ContributorModel {
     var name: String
 
     @Relationship(deleteRule: .cascade, inverse: \SpendingModel.contributor)
-    var spendings: [SpendingModel] = []
+    var spendings: [SpendingModel]
 
     @Relationship(deleteRule: .nullify)
-    var events: [EventModel] = []
+    var events: [EventModel]
 
     init(id: UUID = UUID(), name: String, spendings: [SpendingModel], events: [EventModel]) {
         self.id = id
@@ -62,37 +62,45 @@ final class SpendingModel {
     /// Чья это трата
     @Relationship(deleteRule: .nullify)
     var contributor: ContributorModel
+    /// название траты
+    var name: String
     /// сумма всей траты
     var totalAmount: Double
     /// Должники по трате
     @Relationship(deleteRule: .cascade, inverse: \HolderModel.spending)
-    var holders: [HolderModel] = []
+    var holders: [HolderModel]
 
     @Transient var contributorId: UUID {
         contributor.id
     }
 
-    init(id: UUID = UUID(), totalAmount: Double, holders: [HolderModel], contributor: ContributorModel) {
+    init(id: UUID = UUID(), name: String, totalAmount: Double, holders: [HolderModel] = [], contributor: ContributorModel) {
         self.id = id
         self.contributor = contributor
+        self.name = name
         self.totalAmount = totalAmount
         self.holders = holders
     }
 
     convenience init(spending: Spending, contributor: Contributor) {
-        let holderModels: [HolderModel] = spending.holders.map {
-            HolderModel(
-                contributorId: $0.contributorId,
-                amount: $0.amount,
-                isPayer: $0.isPayer
-            )
-        }
         self.init(
             id: spending.id,
+            name: spending.name,
             totalAmount: spending.totalAmount,
-            holders: holderModels,
+            holders: [], // временно пустой массив
             contributor: ContributorModel(contributor: contributor)
         )
+
+        self.holders = spending.holders.map {
+            HolderModel(
+                id: $0.id,
+                contributorId: $0.contributorId,
+                contributorName: $0.contributorName,
+                amount: $0.amount,
+                isPayer: $0.isPayer,
+                spending: self
+            )
+        }
     }
 }
 
@@ -105,30 +113,32 @@ final class HolderModel {
     var spending: SpendingModel?
     /// На кого потратили
     var contributorId: UUID
+    /// Имя на кого потратили
+    var contributorName: String
     /// Размер долго в этой части траты
     var amount: Double
     /// Является ли плательщиком
     var isPayer: Bool
 
-    init(id: UUID = UUID(), contributorId: UUID, amount: Double, isPayer: Bool, spending: SpendingModel? = nil) {
+    @Transient var spendingId: UUID {
+        spending?.id ?? UUID()
+    }
+
+    init(id: UUID = UUID(), contributorId: UUID, contributorName: String, amount: Double, isPayer: Bool, spending: SpendingModel? = nil) {
         self.id = id
         self.spending = spending
         self.contributorId = contributorId
+        self.contributorName = contributorName
         self.amount = amount
         self.isPayer = isPayer
         self.spending = spending
     }
-
-//    convenience init(holder: Holder, spending: Spending, contributor: Contributor) {
-//        self.init(
-//            id: holder.id,
-//            spending: SpendingModel(
-//                spending: spending,
-//                contributor: contributor
-//            ),
-//            contributorId: holder.contributorId,
-//            amount: holder.amount,
-//            isPayer: holder.isPayer
-//        )
-//    }
 }
+
+
+// MARK: - IdentifiableModel
+
+extension EventModel: IdentifiableModel {}
+extension ContributorModel: IdentifiableModel {}
+extension SpendingModel: IdentifiableModel {}
+extension HolderModel: IdentifiableModel {}

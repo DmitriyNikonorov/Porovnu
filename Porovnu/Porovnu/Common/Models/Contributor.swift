@@ -7,9 +7,12 @@
 
 import Foundation
 
-final class Contributor: Hashable {
+@Observable
+final class Contributor: Hashable, Identifiable {
     static func == (lhs: Contributor, rhs: Contributor) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.name == rhs.name &&
+        lhs.spendings == rhs.spendings
     }
 
     func hash(into hasher: inout Hasher) {
@@ -17,8 +20,8 @@ final class Contributor: Hashable {
     }
 
     let id: UUID
-    let name: String
-    let spendings: [Spending] // траты учатника
+    var name: String
+    var spendings: [Spending] // траты учатника
 //    let debts: [Transaction] // долги участника
 
     init(id: UUID = UUID(), name: String, spendings: [Spending]) {
@@ -33,9 +36,6 @@ final class Contributor: Hashable {
         }
         self.init(id: dataBaseModel.id, name: dataBaseModel.name, spendings: spendings)
     }
-
-
-
 
     /// Словарь трат - [id должника: общая сумма трат]
     var spendingDict = [UUID: Double]()
@@ -82,5 +82,22 @@ final class Contributor: Hashable {
     /// Финальные балансы с утетом взаимных трат
     func calculateBalances() {
         balanceDict = spendingDict.merging(debtsDict, uniquingKeysWith: +)
+    }
+}
+
+// MARK: - CustomStringConvertible
+
+extension Contributor: CustomStringConvertible {
+    var description: String {
+        """
+        👤 Contributor[
+          id: \(id.uuidString.prefix(8))...
+          name: "\(name)"
+          spendings: \(spendings.count)
+          totalSpending: \(String.amountString(amount: totalSpending))
+          totalDebts: \(String.amountString(amount: totalDebts))
+          balance: \(String.amountString(amount: balance))
+        ]
+        """
     }
 }

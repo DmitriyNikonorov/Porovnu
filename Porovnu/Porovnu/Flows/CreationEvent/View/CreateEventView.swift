@@ -1,5 +1,5 @@
 //
-//  CreationEventScreen.swift
+//  CreateEventView.swift
 //  Porovnu
 //
 //  Created by Дмитрий Никоноров on 02.02.2026.
@@ -105,7 +105,7 @@ private extension CreateEventView {
                                 viewModel.deleteContributor(at: index)
                             }
                         } label: {
-                            Image(uiImage: "trash", with: .red)
+                            Image(uiImage: "trash", withColor: .red)
                         }
                         .tint(.clear)
                     }

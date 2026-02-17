@@ -24,14 +24,17 @@ struct NavigationBarModifier: ViewModifier {
 //                    .toolbarColorScheme(.light, for: .navigationBar) // ← опционально
             .toolbar {
                 switch type {
-                case .home(let title):
+                case let .home(title):
                     homeToolbar(title: title)
 
-                case .creationEvent(let title):
+                case let .creationEvent(title):
                     creationEventToolbar(title: title)
 
-                case .event(let title):
+                case let .event(title):
                     eventScreenToolbar(title: title)
+
+                case let .editEvent(title):
+                    editEventScreenToolbar(title: title)
                 }
             }
     }
@@ -92,6 +95,48 @@ struct NavigationBarModifier: ViewModifier {
             Text(title)
                 .font(.headline)
                 .foregroundStyle(Color.appColor(.orangeBrand))
+        }
+
+        ToolbarItem(placement: .topBarTrailing) {
+            if let trailingButtonAction {
+                Button {
+                    trailingButtonAction()
+                } label: {
+                    AppImages.listClipboard.image
+                        .foregroundStyle(Color.appColor(.orangeBrand))
+                }
+            }
+        }
+    }
+
+    @ToolbarContentBuilder
+    private func editEventScreenToolbar(title: String) -> some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            if let leadingButtonAction {
+                Button("Назад", action: leadingButtonAction)
+                    .foregroundStyle(Color.appColor(.orangeBrand))
+            }
+        }
+
+        ToolbarItem(placement: .principal) {
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(Color.appColor(.orangeBrand))
+        }
+
+        ToolbarItem(placement: .topBarTrailing) {
+            if let trailingButtonAction {
+                Button("Сохранить", action: trailingButtonAction)
+                    .foregroundStyle(Color.appColor(.orangeBrand))
+//                Button {
+//                    trailingButtonAction()
+//                } label: {
+//                    AppImages.editPencil.image
+//                        .resizable()
+//                        .frame(width: 24, height: 24)
+//                        .foregroundStyle(Color.appColor(.orangeBrand))
+//                }
+            }
         }
     }
 }

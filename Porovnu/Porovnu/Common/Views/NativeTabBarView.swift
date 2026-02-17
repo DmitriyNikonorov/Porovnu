@@ -10,7 +10,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct NativeTabBarView: View {
 
-    @EnvironmentObject var coordinator: NavigationCoordinator
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @State var homeViewModel: HomeViewModel
     let assembler: DefaultAssembler
 
@@ -23,19 +23,59 @@ struct NativeTabBarView: View {
     }
 
     var body: some View {
-        TabView(selection: $coordinator.selectedTab) {
-            NavigationStack(path: $coordinator.homePath) {
+        TabView(selection: Bindable(navigationCoordinator).selectedTab) {
+            NavigationStack(path: Bindable(navigationCoordinator).homePath) {
                 assembler.resolveHomeView(model: homeViewModel)
                     .navigationDestination(for: AppRoute.self) { route in
                         switch route {
                         case .createEvent:
                             assembler.resolveCreateEventView()
+                                .environment(navigationCoordinator)
 
                         case let .eventDetails(event):
-                            assembler.resolveEventView(event: event)
+                            assembler.resolveEventView(
+                                viewModel: assembler.resolveEventViewModel(
+                                    event: event,
+                                    assembler: assembler
+                                )
+                            )
+                            .environment(navigationCoordinator)
 
-                        case let .editEvent(event):
-                            assembler.resolveEditEventView(event: event)
+                        case let .editEvent(dto):
+                            assembler.resolveEditEventView(
+                                viewModel: assembler.resolveEditEventViewModel(
+                                    dto: dto,
+                                    assembler: assembler
+                                )
+                            )
+                            .environment(navigationCoordinator)
+
+//                        case let .editSpending(creditor, spending, contributors):
+//
+//                                let spendingViewModel = assembler.resolveSpendingViewModel(
+//                                    creditor: creditor,
+//                                    contributors: contributors,
+//                                    spending: spending
+//                                ) { spenging in
+//                                    print("SAVE!!!")
+//                                }
+//                                assembler.resolveSpendingView(viewModel: spendingViewModel)
+//                                .environment(navigationCoordinator)
+                        case let .editSpending(dto):
+
+//                                        let spendingViewModel = assembler.resolveSpendingViewModel(
+//                                            creditor: creditor,
+//                                            contributors: contributors,
+//                                            spending: spending
+//                                        ) { spenging in
+//                                            print("SAVE!!!")
+//                                        }
+
+                            let spendingViewModel = assembler.resolveSpendingViewModel(
+                                dto: dto
+                            )
+                            assembler.resolveSpendingView(viewModel: spendingViewModel)
+                                .environment(navigationCoordinator)
                         }
                     }
             }
@@ -44,8 +84,9 @@ struct NativeTabBarView: View {
             }
             .tag(TabItem.home)
 
-            NavigationStack(path: $coordinator.profilePath) {
+            NavigationStack(path: Bindable(navigationCoordinator).profilePath) {
                 ProfileView()
+                    .environment(navigationCoordinator)
 //                    .navigationDestination(for: AppRoute.self) { route in
 //                        switch route {
 //                        case .createEvent:

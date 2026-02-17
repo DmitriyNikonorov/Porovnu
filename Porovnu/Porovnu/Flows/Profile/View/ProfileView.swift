@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var navagationCoordinator: NavigationCoordinator
+
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
 
     var body: some View {
         Text("Profile")

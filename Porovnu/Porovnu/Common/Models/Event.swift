@@ -31,10 +31,10 @@ struct EventShort: Identifiable, Hashable {
     let name: String
     let contributorsCount: Int
 
-    init(id: UUID = UUID(), name: String, contributors: Int) {
+    init(id: UUID = UUID(), name: String, contributorsCount: Int) {
         self.id = id
         self.name = name
-        self.contributorsCount = contributors
+        self.contributorsCount = contributorsCount
     }
 }
 

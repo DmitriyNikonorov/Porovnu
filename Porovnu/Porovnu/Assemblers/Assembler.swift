@@ -7,8 +7,15 @@
 
 import Foundation
 
-protocol Assembler: HomeAssembler, CreateEventAssembler, EventAssembler {
+protocol Assembler:
+    HomeAssembler,
+    CreateEventAssembler,
+    EventAssembler,
+    EditEventAssembler,
+    SpendingAssembler,
+    ManagerAssembler {
 }
 
 final class DefaultAssembler: Assembler {
+    static let shared = DefaultAssembler()
 }

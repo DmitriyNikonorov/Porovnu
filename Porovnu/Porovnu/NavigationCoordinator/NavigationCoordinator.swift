@@ -7,11 +7,43 @@
 
 import Foundation
 import SwiftUI
-import Combine
+
+struct EditSpendingDto: Equatable, Hashable {
+    static func == (lhs: EditSpendingDto, rhs: EditSpendingDto) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    private let id: UUID = UUID()
+    let creditor: Contributor
+    let spending: Spending?
+    let contributors: [Contributor]
+    let callback: (Spending?) -> Void
+}
+
+struct EditEventDto: Equatable, Hashable {
+    static func == (lhs: EditEventDto, rhs: EditEventDto) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    private let id: UUID = UUID()
+    let event: Event
+    let onSave: ((Event?) -> Void)?
+}
 
 enum AppRoute: Hashable {
     case createEvent
     case eventDetails(Event)
+    case editEvent(EditEventDto)
+//    case editSpending(Contributor, Spending?, [Contributor])
+    case editSpending(EditSpendingDto)
 }
 
 enum RouteAction: String {
@@ -22,7 +54,7 @@ enum RouteAction: String {
 
 // MARK: - Coordinator Protocol
 
-protocol Coordinatable: ObservableObject {
+protocol Coordinatable {
     associatedtype Route: Hashable
     var homePath: NavigationPath { get set }
     func navigate(to route: Route)
@@ -64,15 +96,26 @@ enum TabItem: Int, Hashable {
     }
 }
 
-
-class NavigationCoordinator: ObservableObject, Coordinatable {
+@Observable
+final class NavigationCoordinator: Coordinatable {
     typealias Route = AppRoute
 
     // MARK: - Published Properties
 
-    @Published var selectedTab: TabItem = .home
-    @Published var homePath = NavigationPath()
-    @Published var profilePath = NavigationPath()
+    var selectedTab: TabItem = .home
+    var homePath = NavigationPath()
+    var profilePath = NavigationPath()
+    var isModalShow = false
+
+    // MARK: - Modal Methods
+
+    func showModal() {
+        isModalShow = true
+    }
+
+    func dismissSpending() {
+        isModalShow = false
+    }
 
     // MARK: - Navigation Methods
 
@@ -88,19 +131,18 @@ class NavigationCoordinator: ObservableObject, Coordinatable {
     }
 
     func navigateBack() {
-        switch selectedTab {
-        case .home where !homePath.isEmpty:
-            homePath.removeLast()
+          switch selectedTab {
+          case .home where !homePath.isEmpty:
+              homePath.removeLast()
 
-        case .profile where !profilePath.isEmpty:
-            profilePath.removeLast()
+          case .profile where !profilePath.isEmpty:
+              profilePath.removeLast()
 
-        default:
-            break
-        }
-
-        logNavigation(action: RouteAction.back.rawValue)
-    }
+          default:
+              break
+          }
+          logNavigation(action: RouteAction.back.rawValue)
+      }
 
     func navigateToRoot() {
         switch selectedTab {
@@ -140,18 +182,6 @@ class NavigationCoordinator: ObservableObject, Coordinatable {
         logNavigation(action: RouteAction.backSteps.rawValue + "\(steps)")
     }
 
-//    func navigate(to route: AppRoute) {
-//        guard !isNavigating else { return }
-//
-//        isNavigating = true
-//        DispatchQueue.main.async { [weak self] in
-//            guard let self = self else { return }
-//            self.navigationPath.append(route)
-//            self.isNavigating = false
-//            self.logNavigation(to: route)
-//        }
-//    }
-
     var isHomeRoot: Bool {
         homePath.isEmpty
     }
@@ -166,38 +196,9 @@ class NavigationCoordinator: ObservableObject, Coordinatable {
     func goToCreateEvent() {
         navigate(to: .createEvent)
     }
-//
-//    func goToEventDetails(_ event: Event) {
-//        navigate(to: .eventDetails(event))
-//    }
-//
-//    func goToSettings() {
-//        navigate(to: .settings)
-//    }
-//
-//    func goToProfile(userId: String) {
-//        navigate(to: .profile(userId: userId))
-//    }
-//
-// MARK: - Navigation State
-
-    /// Текущий активный маршрут
-//    var currentRoute: AppRoute? {
-//        guard let last = path.last else {
-//            return nil
-//        }
-//
-//        return last as? AppRoute
-//    }
-//
-//    func isCurrentlyOn(_ route: AppRoute) -> Bool {
-//        return currentRoute == route
-//    }
-
-//    var navigationHistory: [AnyHashable] {
-//        return navigationPath.reversed()
-//    }
 }
+
+
 
 private extension NavigationCoordinator {
 

@@ -9,43 +9,71 @@ import SwiftUI
 
 struct CustomTabBarView: View {
     
-    @EnvironmentObject var navigationCoordiantor: NavigationCoordinator
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     let tabs: [TabItem] = [.home, .profile]
     let assembler: DefaultAssembler
 
-    @State var homeViewModel: HomeViewModel
+    let homeViewModel: HomeViewModel
 
     init(assembler: DefaultAssembler) {
         self.assembler = assembler
-        _homeViewModel = .init(wrappedValue: assembler.resolve())
+        homeViewModel = assembler.resolve()
     }
 
     var body: some View {
         ZStack {
             Group {
-                switch navigationCoordiantor.selectedTab {
+                switch navigationCoordinator.selectedTab {
                 case .home:
-                    NavigationStack(path: $navigationCoordiantor.homePath) {
+                    NavigationStack(path: Bindable(navigationCoordinator).homePath) {
                         assembler.resolveHomeView(model: homeViewModel)
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
                                 case .createEvent:
                                     assembler.resolveCreateEventView()
-
+                                    .environment(navigationCoordinator)
 
                                 case let .eventDetails(event):
-                                    assembler.resolveEventView(event: event)
+                                    assembler.resolveEventView(
+                                        viewModel: assembler.resolveEventViewModel(
+                                            event: event,
+                                            assembler: assembler
+                                        )
+                                    )
+                                    .environment(navigationCoordinator)
 
-                                case let .editEvent(event):
-                                    assembler.resolveEditEventView(event: event)
+                                case let .editEvent(dto):
+                                    assembler.resolveEditEventView(
+                                        viewModel: assembler.resolveEditEventViewModel(
+                                            dto: dto,
+                                            assembler: assembler
+                                        )
+                                    )
+
+                                case let .editSpending(dto):
+
+//                                        let spendingViewModel = assembler.resolveSpendingViewModel(
+//                                            creditor: creditor,
+//                                            contributors: contributors,
+//                                            spending: spending
+//                                        ) { spenging in
+//                                            print("SAVE!!!")
+//                                        }
+
+                                    let spendingViewModel = assembler.resolveSpendingViewModel(
+                                        dto: dto
+                                    )
+                                        assembler.resolveSpendingView(viewModel: spendingViewModel)
+                                        .environment(navigationCoordinator)
                                 }
                             }
                     }
                     .contentMargins(.bottom, 50, for: .scrollContent)
 
                 case .profile:
-                    NavigationStack(path: $navigationCoordiantor.profilePath) {
+                    NavigationStack(path: Bindable(navigationCoordinator).profilePath) {
                         ProfileView()
+                            .environment(navigationCoordinator)
                     }
                     .contentMargins(.bottom, 50, for: .scrollContent)
 
@@ -61,10 +89,10 @@ struct CustomTabBarView: View {
                     ForEach(tabs, id: \.self) { tab in
                         TabButton(
                             tab: tab,
-                            isSelected: navigationCoordiantor.selectedTab == tab
+                            isSelected: navigationCoordinator.selectedTab == tab
                         ) {
                             withAnimation(.spring()) {
-                                navigationCoordiantor.selectedTab = tab
+                                navigationCoordinator.selectedTab = tab
                             }
                         }
                         .frame(maxWidth: .infinity)

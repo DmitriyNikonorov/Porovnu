@@ -1,5 +1,5 @@
 //
-//  ContributorListView.swift
+//  HolderListView.swift
 //  Porovnu
 //
 //  Created by Дмитрий Никоноров on 16.02.2026.
@@ -8,32 +8,11 @@
 import SwiftUI
 
 struct HolderListView: View {
-    
     let isSelected: Bool
-    @FocusState.Binding var isFocused: Bool
     @Binding var holder: Holder
+    @FocusState var isFocused: Bool
+    @State private var displayAmount: String = ""
     var onTap: (Holder) -> Void
-
-    // Вычисляемое свойство для преобразования Double <-> String
-    // Разобрать
-    private var amountBinding: Binding<String> {
-        Binding<String>(
-            get: {
-                // Если amount == 0, возвращаем пустую строку, иначе форматируем
-                holder.amount == 0 ? "" : String(format: "%.2f", holder.amount)
-            },
-            set: { newValue in
-                // Пытаемся преобразовать строку в Double
-                if let value = Double(newValue.replacingOccurrences(of: ",", with: ".")) {
-                    holder.amount = value
-                } else if newValue.isEmpty {
-                    holder.amount = 0
-                }
-                // Если не число - игнорируем
-            }
-        )
-    }
-
 
     var body: some View {
         HStack {
@@ -41,6 +20,7 @@ struct HolderListView: View {
                 Spacer()
             }
             Text(holder.contributorName)
+                .foregroundStyle(Color.appColor(.textSecondary))
                 .onTapGesture {
                     withAnimation {
                         onTap(holder)
@@ -50,15 +30,12 @@ struct HolderListView: View {
                 CustomTextField(
                     placeholder: "Сумма",
                     position: .single,
-                    text: amountBinding,
+                    text: $displayAmount,
                     isFocused: $isFocused,
                     type: .amount
                 )
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-                
             }
+
 
             if !isSelected {
                 Spacer()
@@ -70,5 +47,36 @@ struct HolderListView: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.appColor(.backgroundTertiary))
         )
+        .onAppear {
+            updateDisplayAmount()
+        }
+        .onChange(of: holder.amount) { _, _ in
+            updateDisplayAmount()
+        }
+
+        .onChange(of: holder.amount) { updateDisplayAmount() }
+              // ← КЛЮЧЕВОЕ: синхронизация ПРИ КАЖДОМ изменении текста!
+              .onChange(of: displayAmount) { _, newValue in
+                  applyAmount(newValue)
+              }
+    }
+
+    private func applyAmount(_ text: String) {
+        if text.isEmpty {
+            holder.amount = 0
+        } else if let value = Double.amountFrom(text) {
+            holder.amount = value
+        }
+        // Игнорируем некорректный ввод — оставляем предыдущее значение
+    }
+
+    private func updateDisplayAmount() {
+        // ← Изменено: НЕ перезаписываем во время редактирования!
+        guard !isFocused else {
+            return
+        }
+
+        displayAmount = holder.amount == 0 ? "" : String.amountString(amount: holder.amount)
     }
 }
+

@@ -17,8 +17,6 @@ struct EventCardView: View {
                 .font(.headline)
                 .foregroundStyle(Color.appColor(.textSecondary))
                 .lineLimit(2)
-                .padding(.top, 16)
-                .padding(.horizontal, 16)
 
             // Участники
             HStack {
@@ -39,10 +37,9 @@ struct EventCardView: View {
 //                        .foregroundStyle(.white.opacity(0.6))
 //                }
             }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 16)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 16)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.appColor(.backgroundTertiary))

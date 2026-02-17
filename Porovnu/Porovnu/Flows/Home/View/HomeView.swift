@@ -9,9 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    //    @Environment(\.modelContext) private var modelContext
-    //    @Query private var items: [Item]
-    @EnvironmentObject private var navigationCoordinator: NavigationCoordinator
+
+    @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @State private var showLeftAlert: Bool = false
     @State private var showRightAlert: Bool = false
 
@@ -27,14 +26,25 @@ struct HomeView: View {
                     .padding(.horizontal)
                     .padding(.vertical, 6)
                     .onTapGesture {
-                        print("🖖 \(event.name)")
-                        guard let event = viewModel.fetchModels(by: event.id) else {
-                            return
+                        Task {
+                            guard let event = await viewModel.fetchModels(by: event.id) else {
+                                return
+                            }
+                            navigationCoordinator.navigate(to:.eventDetails(event))
                         }
-                        navigationCoordinator.navigate(to:.eventDetails(event))
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button {
+                                    withAnimation {
+                                        viewModel.deleteModel(by: event.id)
+                                    }
+                            } label: {
+                                Image(uiImage: AppImages.trash.sring, withColor: .red)
+                            }
+                            .tint(.clear)
+
                     }
             }
-            .onDelete(perform: deleteItems)
         }
         .contentMargins(.top, 24, for: .scrollContent)
         .background(Color.appColor(.backgroundSecondary))
@@ -45,19 +55,13 @@ struct HomeView: View {
             trailingButtonAction: navigationCoordinator.goToCreateEvent
         )
         .onAppear {
-            viewModel.fetchModels()
+            Task {
+                await viewModel.fetchModels()
+            }
         }
-    }
-    
-    private func deleteItems(offsets: IndexSet) {
-        //        withAnimation {
-        //            for index in offsets {
-        //                modelContext.delete(items[index])
-        //            }
-        //        }
     }
 }
 
-#Preview {
-    HomeView(viewModel: HomeViewModel())
-}
+//#Preview {
+////    HomeView(viewModel: HomeViewModel(dataBaseManager: DataBaseManager.shared))
+//}

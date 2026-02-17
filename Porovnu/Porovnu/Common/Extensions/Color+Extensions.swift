@@ -31,6 +31,8 @@ enum AppColor {
     case grayBrand
     case turquoiseBrand
     case blueBrand
+
+    case red
 }
 
 extension Color {
@@ -81,6 +83,20 @@ extension Color {
 
         case .blueBrand:
             Color("blue_brand")
+
+        case .red:
+            Color("red")
         }
+    }
+
+    var uiColor: UIColor {
+        UIColor(self)
+    }
+}
+
+extension Image {
+    
+    init(uiImage: String, withColor tintColor: AppColor) {
+        self.init(uiImage: UIImage(named: uiImage)?.withTintColor(Color.appColor(tintColor).uiColor) ?? UIImage())
     }
 }

@@ -6,16 +6,17 @@
 //
 
 protocol HomeAssembler {
-    func resolveHomeView() -> HomeView
+    func resolveHomeView(model: HomeViewModel) -> HomeView
     func resolve() -> HomeViewModel
 }
 
-extension HomeAssembler {
-    func resolveHomeView() -> HomeView {
-        HomeView(viewModel: resolve())
+extension HomeAssembler where Self: DefaultAssembler {
+
+    func resolveHomeView(model: HomeViewModel) -> HomeView {
+        HomeView(viewModel: model)
     }
 
     func resolve() -> HomeViewModel {
-        HomeViewModel()
+        HomeViewModel(dataBaseManager: resolveDataBaseManager())
     }
 }

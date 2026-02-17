@@ -7,15 +7,17 @@
 
 protocol CreateEventAssembler {
     func resolveCreateEventView() -> CreateEventView
-    func resolve() -> CreateEventViewModel
+    func resolveCreateEventViewModel() -> CreateEventViewModel
 }
 
 extension CreateEventAssembler {
     func resolveCreateEventView() -> CreateEventView {
-        CreateEventView(viewModel: resolve())
+        CreateEventView(viewModel: resolveCreateEventViewModel())
     }
+}
 
-    func resolve() -> CreateEventViewModel {
-        CreateEventViewModel()
+extension CreateEventAssembler where Self: DefaultAssembler {
+    func resolveCreateEventViewModel() -> CreateEventViewModel {
+        CreateEventViewModel(dataBaseManager: resolveDataBaseManager())
     }
 }
