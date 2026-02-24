@@ -21,6 +21,7 @@ struct CustomTextField: View {
     @Binding var text: String
     let onFocusChange: ((Bool) -> Void)?
     let type: TextFieldTypeEnum
+    @Binding var isKeyboardShow: Bool
 
     // MARK: - Init
 
@@ -29,13 +30,19 @@ struct CustomTextField: View {
         position: FieldPosition? = nil,
         text: Binding<String>,
         onFocusChange: ((Bool) -> Void)? = nil,
-        type: TextFieldTypeEnum = .casual
+        type: TextFieldTypeEnum = .casual,
+        isKeyboardShow: Binding<Bool>? = nil
     ) {
         self.placeholder = placeholder
         self.position = position
         self._text = text
         self.onFocusChange = onFocusChange
         self.type = type
+        if let binding = isKeyboardShow {
+            self._isKeyboardShow = binding
+        } else {
+            self._isKeyboardShow = .constant(false)
+        }
     }
 
     // MARK: - Body
@@ -52,6 +59,7 @@ struct CustomTextField: View {
                 .submitLabel(.done)
                 .onChange(of: isFocusedInternal) { _, isFocused in
                     onFocusChange?(isFocused)
+                    isKeyboardShow = isFocused
                 }
                 .onSubmit {
                     isFocusedInternal = false

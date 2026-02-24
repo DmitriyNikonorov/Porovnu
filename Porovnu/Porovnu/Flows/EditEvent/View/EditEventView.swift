@@ -14,6 +14,8 @@ struct EditEventView: View {
     private let viewModel: EditEventViewModel
     private let coordinateSpaceName = "scrollView"
 
+    @State private var keyboardHeight: CGFloat = 0
+
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @FocusState private var isFocused: Bool
     @State private var isAddButtonInListVisible = true
@@ -23,6 +25,7 @@ struct EditEventView: View {
     @State private var isDeleteMode: Bool = false
     @State private var isShowEditBarButton: Bool = true
     @State private var selectedPage: PagaIndicatorType = .spendings
+    @State private var isKeyboardShow: Bool = false
 
     // MARK: - Init
 
@@ -108,7 +111,8 @@ private extension EditEventView {
                     CustomTextField(
                         placeholder: "Введите название",
                         text: Bindable(viewModel).eventName,
-                        type: .largeTitle
+                        type: .largeTitle,
+                        isKeyboardShow: $isKeyboardShow
                     )
                 }
                 .padding(.top, 40)
@@ -131,7 +135,8 @@ private extension EditEventView {
                         isFocused: $isFocused,
                         contributor: contributor,
                         onAction: onAction,
-                        isDeleteMode: $isDeleteMode
+                        isDeleteMode: $isDeleteMode,
+                        isKeyboardShow: $isKeyboardShow
                     )
                     .padding(.vertical, 6)
                 }
@@ -157,8 +162,6 @@ private extension EditEventView {
             .buttonStyle(PlainButtonStyle())
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
-
-            // FIXME: - проверить
             .visibilityTracker(
                 isVisible: $isAddButtonInListVisible,
                 coordinateSpace: coordinateSpaceName
@@ -166,6 +169,10 @@ private extension EditEventView {
             .opacity(isAddButtonInListVisible ? 1 : 0)
             .disabled(!isAddButtonInListVisible)
         }
+        .onChange(of: isKeyboardShow) { _, isKeyboardVisible in
+            keyboardHeight = isKeyboardVisible ? 335 : 0
+        }
+        .contentMargins(.bottom, keyboardHeight, for: .scrollContent)
     }
 
     func buttonStack() -> some View {

@@ -19,13 +19,13 @@ struct CreateEventView: View {
     @State private var isAddButtonInListVisible = true
     // Имя координатного пространства для отслеживания
     private let coordinateSpaceName = "scrollView"
+    @State var isKeyboardShow: Bool = false
 
     var body: some View {
         ZStack {
             createForm()
                 .background(Color.appColor(.backgroundSecondary))
                 .listStyle(.plain)
-//                .foregroundStyle(Color.appColor(.backgroundSecondary))
                 .contentMargins(.bottom, 90, for: .scrollContent)
 
             VStack {
@@ -92,7 +92,8 @@ private extension CreateEventView {
             CustomTextField(
                 placeholder: "Введите название",
                 position: .single,
-                text: Bindable(viewModel).eventName
+                text: Bindable(viewModel).eventName,
+                isKeyboardShow: $isKeyboardShow
             )
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
@@ -111,7 +112,8 @@ private extension CreateEventView {
                 CustomTextField(
                     placeholder: "Участник \((index) + 1)",
                     position: definePosition(for: index, in: Bindable(viewModel).contributors.count),
-                    text: item.name
+                    text: item.name,
+                    isKeyboardShow: $isKeyboardShow
                 )
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)

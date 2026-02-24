@@ -10,7 +10,7 @@ import SwiftUI
 struct AmountConvertTextField: View {
 
     // MARK: - Private properties
-
+    @FocusState private var isFocusedState: Bool
     @State private var displayAmount: String = String()
 
     // MARK: - Public properties
@@ -30,6 +30,7 @@ struct AmountConvertTextField: View {
         self.placeholder = placeholder
         self.type = type
         _isFocused = .init(initialValue: isFocused)
+
     }
 
     var body: some View {

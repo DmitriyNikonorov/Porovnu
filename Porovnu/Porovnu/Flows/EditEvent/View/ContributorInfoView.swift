@@ -28,6 +28,7 @@ struct ContributorInfoView: View {
     @Binding var contributor: Contributor
     var onAction: (EditViewAction) -> Void
     @Binding var isDeleteMode: Bool
+    @Binding var isKeyboardShow: Bool
 
     // MARK: - Body
 
@@ -38,7 +39,8 @@ struct ContributorInfoView: View {
                     CustomTextField(
                         placeholder: placeholder,
                         text: $contributor.name,
-                        type: .title
+                        type: .title,
+                        isKeyboardShow: $isKeyboardShow
                     )
                     Spacer()
                     Button {
