@@ -53,7 +53,7 @@ final class CreateEventViewModel: ViewModel {
             contributors: contributors
         )
 
-        dataBaseManager.save(EventModel(event: event))
+        dataBaseManager.saveEvent(event: event)
         return event
     }
 

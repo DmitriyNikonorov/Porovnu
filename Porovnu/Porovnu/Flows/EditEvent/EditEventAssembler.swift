@@ -7,7 +7,8 @@
 
 protocol EditEventAssembler {
     func resolveEditEventView(viewModel: EditEventViewModel) -> EditEventView
-    func resolveEditEventViewModel(dto: EditEventDto, assembler: SpendingAssembler) -> EditEventViewModel
+//    func resolveEditEventViewModel(dto: EditEventDto, assembler: SpendingAssembler) -> EditEventViewModel
+    func resolveEditEventViewModel(assembler: SpendingAssembler) -> EditEventViewModel
 }
 
 extension EditEventAssembler {
@@ -17,7 +18,7 @@ extension EditEventAssembler {
 }
 
 extension EditEventAssembler where Self: DefaultAssembler {
-    func resolveEditEventViewModel(dto: EditEventDto, assembler: SpendingAssembler) -> EditEventViewModel {
-        EditEventViewModel(dto: dto, assembler: assembler, dataBaseManager: resolveDataBaseManager())
+    func resolveEditEventViewModel(assembler: SpendingAssembler) -> EditEventViewModel {
+        EditEventViewModel(assembler: assembler, dataBaseManager: resolveDataBaseManager())
     }
 }

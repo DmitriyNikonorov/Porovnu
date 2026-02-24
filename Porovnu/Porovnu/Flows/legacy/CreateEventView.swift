@@ -48,9 +48,11 @@ struct CreateEventView: View {
             .ignoresSafeArea(.keyboard)
         }
         .navigationBar(
-            for: .creationEvent(title: "Новое событие"),
-            leadingButtonAction: navigationCoordinator.navigateToRoot,
-            trailingButtonAction: trailingButtonAction
+            model: NavigationBarModel(
+                type: .creationEvent(title: "Новое событие"),
+                leadingButtonAction: leadingButtonAction,
+                trailingButtonAction: trailingButtonAction
+            )
         )
         .showToast(
             showToast: $showTopToast,
@@ -60,6 +62,25 @@ struct CreateEventView: View {
 }
 
 private extension CreateEventView {
+
+    var leadingButtonAction: NavigationBarButtonActionType {
+        NavigationBarButtonActionType(firstAction: navigationCoordinator.navigateToRoot)
+    }
+
+    var trailingButtonAction: NavigationBarButtonActionType {
+        NavigationBarButtonActionType(
+            firstAction: {
+                guard let event = viewModel.createEvent() else {
+                    withAnimation {
+                        showTopToast = true
+                    }
+                    return
+                }
+
+                navigationCoordinator.navigate(to: .eventDetails(event))
+            }
+        )
+    }
 
     func createForm() -> some View {
         List {
@@ -71,8 +92,7 @@ private extension CreateEventView {
             CustomTextField(
                 placeholder: "Введите название",
                 position: .single,
-                text: Bindable(viewModel).eventName,
-                isFocused: $isFocused
+                text: Bindable(viewModel).eventName
             )
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
@@ -91,8 +111,7 @@ private extension CreateEventView {
                 CustomTextField(
                     placeholder: "Участник \((index) + 1)",
                     position: definePosition(for: index, in: Bindable(viewModel).contributors.count),
-                    text: item.name,
-                    isFocused: $isFocused
+                    text: item.name
                 )
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
@@ -143,21 +162,9 @@ private extension CreateEventView {
             showToast: $showTopToast,
             toastData: ToastView.ToastData(
                 title: "Заполните поля",
-                message: "Укажите название мероприятия и хотя бы одного участника",
-                backgroundColor: Color.appColor(.blueBrand)
+                message: "Укажите название мероприятия и хотя бы одного участника"
             )
         )
-    }
-
-    func trailingButtonAction() {
-        guard let event = viewModel.createEvent() else {
-            withAnimation {
-                showTopToast = true
-            }
-            return
-        }
-
-        navigationCoordinator.navigate(to: .eventDetails(event))
     }
 
     func definePosition(for index: Int, in arrayCount: Int) -> FieldPosition {
@@ -176,7 +183,6 @@ private extension CreateEventView {
         }
     }
 }
-
 
 struct VisibilityTrackerModifier: ViewModifier {
 
@@ -221,7 +227,6 @@ struct ToastView: View {
     struct ToastData {
         var title: String
         var message: String
-        var backgroundColor: Color
     }
 
     @Binding var showToast: Bool

@@ -8,75 +8,58 @@
 import SwiftUI
 
 struct HolderListView: View {
-    let isSelected: Bool
+
+    // MARK: - Public propertie
+
     @Binding var holder: Holder
     @FocusState var isFocused: Bool
-    @State private var displayAmount: String = ""
+    let isSelected: Bool
     var onTap: (Holder) -> Void
 
+    // MARK: - Body
+
     var body: some View {
-        HStack {
-            if !isSelected {
-                Spacer()
-            }
-            Text(holder.contributorName)
-                .foregroundStyle(Color.appColor(.textSecondary))
-                .onTapGesture {
-                    withAnimation {
-                        onTap(holder)
-                    }
-                }
-            if isSelected {
-                CustomTextField(
-                    placeholder: "Сумма",
-                    position: .single,
-                    text: $displayAmount,
-                    isFocused: $isFocused,
-                    type: .amount
-                )
-            }
-
-
-            if !isSelected {
-                Spacer()
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 10)
-        .background(
+        ZStack(alignment: .center) {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.appColor(.backgroundTertiary))
-        )
-        .onAppear {
-            updateDisplayAmount()
-        }
-        .onChange(of: holder.amount) { _, _ in
-            updateDisplayAmount()
-        }
+                .overlay(
+                    isSelected
+                    ? RoundedRectangle(cornerRadius: 16).stroke(Color.appColor(.orangeBrand).opacity(0.3), lineWidth: 1)
+                    : nil
+                )
+            HStack(spacing: 0) {
+                if !isSelected {
+                    Spacer()
+                }
 
-        .onChange(of: holder.amount) { updateDisplayAmount() }
-              // ← КЛЮЧЕВОЕ: синхронизация ПРИ КАЖДОМ изменении текста!
-              .onChange(of: displayAmount) { _, newValue in
-                  applyAmount(newValue)
-              }
-    }
-
-    private func applyAmount(_ text: String) {
-        if text.isEmpty {
-            holder.amount = 0
-        } else if let value = Double.amountFrom(text) {
-            holder.amount = value
+                Text(holder.contributorName)
+                    .foregroundStyle(Color.appColor(.textSecondary))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .padding(.vertical, 10)
+                    .padding(.leading, 8)
+                    .padding(.trailing, 8)
+                    .layoutPriority(1)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation {
+                            onTap(holder)
+                        }
+                    }
+                if isSelected {
+                    Divider()
+                        .background(Color.appColor(.orangeBrand))
+                    AmountConvertTextField(
+                        amount: $holder.amount,
+                        placeholder: "Сумма",
+                        type: .amount
+                    )
+                    .layoutPriority(1)
+                }
+                if !isSelected {
+                    Spacer()
+                }
+            }
         }
-        // Игнорируем некорректный ввод — оставляем предыдущее значение
-    }
-
-    private func updateDisplayAmount() {
-        // ← Изменено: НЕ перезаписываем во время редактирования!
-        guard !isFocused else {
-            return
-        }
-
-        displayAmount = holder.amount == 0 ? "" : String.amountString(amount: holder.amount)
     }
 }
-

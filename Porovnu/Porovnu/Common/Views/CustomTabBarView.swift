@@ -12,12 +12,11 @@ struct CustomTabBarView: View {
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     let tabs: [TabItem] = [.home, .profile]
     let assembler: DefaultAssembler
-
-    let homeViewModel: HomeViewModel
+    let homeViewModel: EditEventViewModel
 
     init(assembler: DefaultAssembler) {
         self.assembler = assembler
-        homeViewModel = assembler.resolve()
+        homeViewModel = assembler.resolveEditEventViewModel(assembler: assembler)
     }
 
     var body: some View {
@@ -26,13 +25,9 @@ struct CustomTabBarView: View {
                 switch navigationCoordinator.selectedTab {
                 case .home:
                     NavigationStack(path: Bindable(navigationCoordinator).homePath) {
-                        assembler.resolveHomeView(model: homeViewModel)
+                        assembler.resolveEditEventView(viewModel: homeViewModel)
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
-                                case .createEvent:
-                                    assembler.resolveCreateEventView()
-                                    .environment(navigationCoordinator)
-
                                 case let .eventDetails(event):
                                     assembler.resolveEventView(
                                         viewModel: assembler.resolveEventViewModel(
@@ -42,23 +37,15 @@ struct CustomTabBarView: View {
                                     )
                                     .environment(navigationCoordinator)
 
-                                case let .editEvent(dto):
-                                    assembler.resolveEditEventView(
-                                        viewModel: assembler.resolveEditEventViewModel(
-                                            dto: dto,
-                                            assembler: assembler
+                                case let .eventList(dto):
+                                    assembler.resolveEventsListView(
+                                        model: assembler.resolveEventsListViewModel(
+                                            dto: dto
                                         )
                                     )
+                                    .environment(navigationCoordinator)
 
                                 case let .editSpending(dto):
-
-//                                        let spendingViewModel = assembler.resolveSpendingViewModel(
-//                                            creditor: creditor,
-//                                            contributors: contributors,
-//                                            spending: spending
-//                                        ) { spenging in
-//                                            print("SAVE!!!")
-//                                        }
 
                                     let spendingViewModel = assembler.resolveSpendingViewModel(
                                         dto: dto
@@ -98,7 +85,6 @@ struct CustomTabBarView: View {
                         .frame(maxWidth: .infinity)
                     }
                 }
-//                .padding(.horizontal, 16)
                 .padding(.vertical, 6.0)
                 .background(
                     RoundedRectangle(cornerRadius: 25)

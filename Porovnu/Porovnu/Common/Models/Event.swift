@@ -12,7 +12,7 @@ struct Event: Identifiable, Hashable {
     let name: String
     let contributors: [Contributor]
 
-    init(id: UUID = UUID(), name: String, contributors: [Contributor]) {
+    init(id: UUID = UUID(), name: String = String(), contributors: [Contributor] = []) {
         self.id = id
         self.name = name
         self.contributors = contributors

@@ -33,14 +33,15 @@ struct PorovnuApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if #available(iOS 26.0, *) {
-                    NativeTabBarView(assembler: assembler)
-
-                } else {
+//                if #available(iOS 26.0, *) {
+//                    NativeTabBarView(assembler: assembler)
+//
+//                } else {
                     CustomTabBarView(assembler: assembler)
-                }
+//                }
             }
             .environment(navigationCoordinator)
+
         }
     }
 }

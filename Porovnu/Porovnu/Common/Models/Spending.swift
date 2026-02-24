@@ -8,6 +8,7 @@
 import Foundation
 // Трата
 struct Spending: Hashable, Identifiable {
+
     let id: UUID
     /// Чья это трата
     let contributorId: UUID
@@ -66,7 +67,7 @@ extension Spending: CustomStringConvertible {
           id: \(id.uuidString.prefix(8))...
           contributorId: \(contributorId.uuidString.prefix(8))...
           name: "\(name)"
-          total: \(String.amountString(amount: totalAmount))
+          total: \(String.amountString(totalAmount))
           holders: \(holders.count)
         ]
         """

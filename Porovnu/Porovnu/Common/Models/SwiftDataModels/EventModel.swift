@@ -18,15 +18,13 @@ final class EventModel {
     @Relationship(deleteRule: .nullify, inverse: \ContributorModel.events)
     var contributors: [ContributorModel] = []
 
-    init(id: UUID = UUID(), name: String, contributors: [ContributorModel]) {
+    init(id: UUID = UUID(), name: String) {
         self.id = id
         self.name = name
-        self.contributors = contributors
     }
 
     convenience init(event: Event) {
-        let contributors: [ContributorModel] = event.contributors.map { ContributorModel(contributor: $0) }
-        self.init(id: event.id, name: event.name, contributors: contributors)
+        self.init(id: event.id, name: event.name)
     }
 }
 
@@ -38,21 +36,19 @@ final class ContributorModel {
     var name: String
 
     @Relationship(deleteRule: .cascade, inverse: \SpendingModel.contributor)
-    var spendings: [SpendingModel]
+    var spendings: [SpendingModel] = []
 
     @Relationship(deleteRule: .nullify)
-    var events: [EventModel]
+    var events: [EventModel] = []
 
-    init(id: UUID = UUID(), name: String, spendings: [SpendingModel], events: [EventModel]) {
-        self.id = id
-        self.name = name
-        self.spendings = spendings
-        self.events = events
-    }
+     init(id: UUID = UUID(), name: String) {
+         self.id = id
+         self.name = name
+     }
 
-    convenience init(contributor: Contributor) {
-        self.init(id: contributor.id, name: contributor.name, spendings: [], events: [])
-    }
+     convenience init(contributor: Contributor) {
+         self.init(id: contributor.id, name: contributor.name)
+     }
 }
 
 @Model
@@ -61,7 +57,7 @@ final class SpendingModel {
     var id: UUID
     /// Чья это трата
     @Relationship(deleteRule: .nullify)
-    var contributor: ContributorModel
+    var contributor: ContributorModel?
     /// название траты
     var name: String
     /// сумма всей траты
@@ -71,10 +67,11 @@ final class SpendingModel {
     var holders: [HolderModel]
 
     @Transient var contributorId: UUID {
-        contributor.id
+        // FIXME: - не консистентно
+        contributor?.id ?? UUID()
     }
 
-    init(id: UUID = UUID(), name: String, totalAmount: Double, holders: [HolderModel] = [], contributor: ContributorModel) {
+    init(id: UUID = UUID(), name: String, totalAmount: Double, holders: [HolderModel], contributor: ContributorModel? = nil) {
         self.id = id
         self.contributor = contributor
         self.name = name
@@ -82,25 +79,15 @@ final class SpendingModel {
         self.holders = holders
     }
 
-    convenience init(spending: Spending, contributor: Contributor) {
-        self.init(
-            id: spending.id,
-            name: spending.name,
-            totalAmount: spending.totalAmount,
-            holders: [], // временно пустой массив
-            contributor: ContributorModel(contributor: contributor)
-        )
+    init(id: UUID = UUID(), name: String, totalAmount: Double) {
+        self.id = id
+        self.name = name
+        self.totalAmount = totalAmount
+        self.holders = []
+    }
 
-        self.holders = spending.holders.map {
-            HolderModel(
-                id: $0.id,
-                contributorId: $0.contributorId,
-                contributorName: $0.contributorName,
-                amount: $0.amount,
-                isPayer: $0.isPayer,
-                spending: self
-            )
-        }
+    convenience init(spending: Spending) {
+        self.init(id: spending.id, name: spending.name, totalAmount: spending.totalAmount)
     }
 }
 
@@ -131,8 +118,18 @@ final class HolderModel {
         self.contributorName = contributorName
         self.amount = amount
         self.isPayer = isPayer
-        self.spending = spending
     }
+
+    convenience init(holder: Holder, spending: SpendingModel) {
+         self.init(
+             id: holder.id,
+             contributorId: holder.contributorId,
+             contributorName: holder.contributorName,
+             amount: holder.amount,
+             isPayer: holder.isPayer,
+             spending: spending  // ← ГОТОВЫЙ spending из контекста!
+         )
+     }
 }
 
 

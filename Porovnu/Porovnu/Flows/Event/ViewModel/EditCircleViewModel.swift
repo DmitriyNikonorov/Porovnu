@@ -1,5 +1,5 @@
 //
-//  EventViewModel.swift
+//  EditCircleViewModel.swift
 //  Porovnu
 //
 //  Created by Дмитрий Никоноров on 05.02.2026.
@@ -8,12 +8,8 @@
 import SwiftUI
 import SwiftData
 
-struct EventViewInputModule {
-    let event: Event
-}
-
 @Observable
-final class EventViewModel: ViewModel {
+final class EditCircleViewModel: ViewModel {
 
     private let dataBaseManager: DataBaseManagerProtocol
     let assembler: SpendingAssembler
@@ -30,14 +26,11 @@ final class EventViewModel: ViewModel {
     private var spendingsDict = [UUID: Spending]()
 
     var selectedWord: String = ""
-    var words: [String] {  // Замените @State words на это!
+    var words: [String] { 
         event.contributors.map(\.name)
     }
 
     func updateEvent(event: Event) {
-//        self.event = Event(id: event.id, name: event.name, contributors: event.contributors)
-        // ✅ Глубокая копия contributors!
-
         self.event = Event(
                 id: event.id,
                 name: event.name,
@@ -76,17 +69,19 @@ final class EventViewModel: ViewModel {
             return
         }
 
-        dataBaseManager.save(SpendingModel(spending: spending, contributor: selectContributor))
-        selectContributor.spendings.append(spending)
+        var spendings = selectContributor.spendings
+        spendings.append(spending)
+        let newSelectContributor = Contributor(id: selectContributor.id, name: selectContributor.name, spendings: spendings)
+
         var contributors = event.contributors
-        contributors[contributorIndex] = selectContributor
+        contributors[contributorIndex] = newSelectContributor
         event = Event(id: event.id, name: event.name, contributors: contributors)
     }
 }
 
 // MARK: - Private
 
-private extension EventViewModel {
+private extension EditCircleViewModel {
     func calculateSpendings() {
         // Пока берем первого участника, потом брать того кто isUser
         // Маппим траты каждого участника
@@ -106,7 +101,9 @@ private extension EventViewModel {
 
         let updatedContributors = event.contributors.reduce(into: [Contributor]()) { result, contributor in
             if let debts = contributorsDebts[contributor.id] {
-                contributor.caclulateTotalDebts(for: debts)
+
+                // FIXME: - 
+//                contributor.caclulateTotalDebts(for: debts)
                 result.append(contributor)
             }
         }

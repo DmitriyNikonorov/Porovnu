@@ -34,16 +34,31 @@ struct EditEventDto: Equatable, Hashable {
     }
 
     private let id: UUID = UUID()
-    let event: Event
+    let event: Event?
     let onSave: ((Event?) -> Void)?
 }
 
+struct EventListDto: Equatable, Hashable {
+    private let id: UUID = UUID()
+    let onSelect: ((UUID) -> Void)
+    let onCreateNew: (() -> Void)
+
+    static func == (lhs: EventListDto, rhs: EventListDto) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+
+
 enum AppRoute: Hashable {
-    case createEvent
     case eventDetails(Event)
-    case editEvent(EditEventDto)
-//    case editSpending(Contributor, Spending?, [Contributor])
+//    case editEvent(EditEventDto)
     case editSpending(EditSpendingDto)
+    case eventList(EventListDto)
 }
 
 enum RouteAction: String {
@@ -188,13 +203,6 @@ final class NavigationCoordinator: Coordinatable {
 
     var isProfileRoot: Bool {
         profilePath.isEmpty
-    }
-
-
-    // MARK: - Convenience Methods
-    
-    func goToCreateEvent() {
-        navigate(to: .createEvent)
     }
 }
 

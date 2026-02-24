@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
 
-    static func amountString(amount: Double) -> String {
+    static func amountString(_ amount: Double) -> String {
         String(format: "%.2f", amount)
     }
 

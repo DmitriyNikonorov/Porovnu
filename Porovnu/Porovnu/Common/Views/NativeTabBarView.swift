@@ -11,12 +11,12 @@ import SwiftUI
 struct NativeTabBarView: View {
 
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
-    @State var homeViewModel: HomeViewModel
+    @State var homeViewModel: EditEventViewModel
     let assembler: DefaultAssembler
 
     init(assembler: DefaultAssembler) {
         self.assembler = assembler
-        _homeViewModel = .init(wrappedValue: assembler.resolve())
+        _homeViewModel = .init(wrappedValue: assembler.resolveEditEventViewModel(assembler: assembler))
         // Глобальная настройка цветов для TabView (iOS 26)
         UITabBar.appearance().unselectedItemTintColor = UIColor(Color.appColor(.grayBrand))
         UITabBar.appearance().tintColor = UIColor(Color.appColor(.orangeBrand))
@@ -25,13 +25,9 @@ struct NativeTabBarView: View {
     var body: some View {
         TabView(selection: Bindable(navigationCoordinator).selectedTab) {
             NavigationStack(path: Bindable(navigationCoordinator).homePath) {
-                assembler.resolveHomeView(model: homeViewModel)
+                assembler.resolveEditEventView(viewModel: homeViewModel)
                     .navigationDestination(for: AppRoute.self) { route in
                         switch route {
-                        case .createEvent:
-                            assembler.resolveCreateEventView()
-                                .environment(navigationCoordinator)
-
                         case let .eventDetails(event):
                             assembler.resolveEventView(
                                 viewModel: assembler.resolveEventViewModel(
@@ -41,36 +37,15 @@ struct NativeTabBarView: View {
                             )
                             .environment(navigationCoordinator)
 
-                        case let .editEvent(dto):
-                            assembler.resolveEditEventView(
-                                viewModel: assembler.resolveEditEventViewModel(
-                                    dto: dto,
-                                    assembler: assembler
+                        case let .eventList(dto):
+                            assembler.resolveEventsListView(
+                                model: assembler.resolveEventsListViewModel(
+                                    dto: dto
                                 )
                             )
                             .environment(navigationCoordinator)
 
-//                        case let .editSpending(creditor, spending, contributors):
-//
-//                                let spendingViewModel = assembler.resolveSpendingViewModel(
-//                                    creditor: creditor,
-//                                    contributors: contributors,
-//                                    spending: spending
-//                                ) { spenging in
-//                                    print("SAVE!!!")
-//                                }
-//                                assembler.resolveSpendingView(viewModel: spendingViewModel)
-//                                .environment(navigationCoordinator)
                         case let .editSpending(dto):
-
-//                                        let spendingViewModel = assembler.resolveSpendingViewModel(
-//                                            creditor: creditor,
-//                                            contributors: contributors,
-//                                            spending: spending
-//                                        ) { spenging in
-//                                            print("SAVE!!!")
-//                                        }
-
                             let spendingViewModel = assembler.resolveSpendingViewModel(
                                 dto: dto
                             )

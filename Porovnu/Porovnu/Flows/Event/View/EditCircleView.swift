@@ -1,5 +1,5 @@
 //
-//  EventView.swift
+//  EditCircleView.swift
 //  Porovnu
 //
 //  Created by Дмитрий Никоноров on 02.02.2026.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct EventView: View {
+struct EditCircleView: View {
 
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     @Namespace private var namespace
@@ -16,7 +16,7 @@ struct EventView: View {
     @State private var angle: Angle = .zero
     @State private var prevAngle: Angle = .zero
 //    private let words: [String]
-    private let viewModel: EventViewModel
+    private let viewModel: EditCircleViewModel
 
     /// Массив для отображения всех связей сразу. Пока используется только одна связь
     @State private var connections: [WordConnection] = []
@@ -24,7 +24,7 @@ struct EventView: View {
     @State var source: String = ""
 
 
-    init(viewModel: EventViewModel) {
+    init(viewModel: EditCircleViewModel) {
         self.viewModel = viewModel
 //        words = viewModel.event.contributors.map(\.name)
     }
@@ -82,24 +82,44 @@ struct EventView: View {
         }
         .background(Color.appColor(.backgroundSecondary))
         .navigationBar(
-            for: .event(title: viewModel.event.name),
-            leadingButtonAction: navigationCoordinator.navigateToRoot,
-            trailingButtonAction: {
-                navigationCoordinator.navigate(to: .editEvent(EditEventDto(event: viewModel.event, onSave: { event in
-                    guard let event else {
-                        return
-                    }
-                    viewModel.updateEvent(event: event)
-
-                })))
-            }
+            model: NavigationBarModel(
+                type: .event(title: viewModel.event.name),
+                leadingButtonAction: leadingButtonAction,
+                trailingButtonAction: trailingButtonAction
+            )
         )
     }
 }
 
 // MARK: - Private
 
-private extension EventView {
+private extension EditCircleView {
+
+    var leadingButtonAction: NavigationBarButtonActionType {
+        NavigationBarButtonActionType(
+            firstAction: navigationCoordinator.navigateToRoot
+        )
+    }
+
+    var trailingButtonAction: NavigationBarButtonActionType {
+        NavigationBarButtonActionType(
+            firstAction: {
+//                navigationCoordinator.navigate(
+//                    to: .editEvent(
+//                        EditEventDto(
+//                            event: viewModel.event,
+//                            onSave: { event in
+//                                guard let event else {
+//                                    return
+//                                }
+//                                viewModel.updateEvent(event: event)
+//                            }
+//                        )
+//                    )
+//                )
+            }
+        )
+    }
 
     func updateSelectedWord() {
         let rotationDegrees = angle.degrees.truncatingRemainder(dividingBy: 360)

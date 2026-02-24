@@ -8,6 +8,7 @@
 import Foundation
 // Доля в трате
 struct Holder: Hashable, Identifiable {
+
     let id: UUID
     /// Родительская трата
     let spendingId: UUID
@@ -30,6 +31,17 @@ struct Holder: Hashable, Identifiable {
         self.isPayer = isPayer
     }
 
+    init(holder: Holder, amount: Double) {
+        self.init(
+            id: holder.id,
+            spendingId: holder.spendingId,
+            contributorId: holder.contributorId,
+            contributorName: holder.contributorName,
+            amount: amount,
+            isPayer: holder.isPayer
+        )
+    }
+
     init(dataBaseModel: HolderModel) {
         self.init(
             id: dataBaseModel.id,
@@ -40,16 +52,27 @@ struct Holder: Hashable, Identifiable {
             isPayer: dataBaseModel.isPayer
         )
     }
-
-    func hash(into hasher: inout Hasher) {
-           hasher.combine(id)
-       }
-
-       static func == (lhs: Holder, rhs: Holder) -> Bool {
-           lhs.id == rhs.id
-       }
 }
 
 enum HolderType {
     case reditor, debtor
+}
+
+
+// MARK: - CustomStringConvertible
+
+extension Holder: CustomStringConvertible {
+    var description: String {
+        """
+        💰 Holder[
+          id: \(id.uuidString.prefix(8))...
+          spendingId: UUID
+          spendingId: \(spendingId .uuidString.prefix(8))...
+          contributorId: \(contributorId.uuidString.prefix(8))...
+          contributorName: "\(contributorName)"
+          amount: \(String.amountString(amount))
+          isPayer: \(isPayer)
+        ]
+        """
+    }
 }

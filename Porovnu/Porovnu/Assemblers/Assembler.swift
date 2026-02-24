@@ -8,8 +8,7 @@
 import Foundation
 
 protocol Assembler:
-    HomeAssembler,
-    CreateEventAssembler,
+    EventsListAssembler,
     EventAssembler,
     EditEventAssembler,
     SpendingAssembler,
