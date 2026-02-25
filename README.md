@@ -6,10 +6,6 @@
 [![SwiftData](https://img.shields.io/badge/Data-SwiftData-green)]()
 [![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-purple?logo=swift)]()
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x400/2E2E2E/FFFFFF?text=Скриншот+приложения+Spliit" alt="Демо Spliit" width="80%">
-</p>
-
 ## О проекте
 
 **Porovnu** — это интуитивное iOS-приложение, которое решает вечную проблему совместных расчетов. Сколько раз вы пытались в уме посчитать долг за ужин, аренду квартиры на море или совместные покупки? Porovnu берет эту головную боль на себя, превращая хаотичные траты в прозрачную систему взаиморасчетов.
