@@ -163,14 +163,12 @@ Porovnu/
 ## Скриншоты
 
 
-
-
 <div align="center">
   <table>
     <tr>
-      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 18 04" src="https://github.com/user-attachments/assets/b1a6cd99-5544-4d4c-bd2a-69c8ea872780" width="200">></td>
+      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 18 04" src="https://github.com/user-attachments/assets/b1a6cd99-5544-4d4c-bd2a-69c8ea872780" width="200"></td>
       <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 15 40" src="https://github.com/user-attachments/assets/a59d2557-a5bb-4ac8-a3d1-1cf6ec33809b" width="200"></td>
-      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 18 04" src="https://github.com/user-attachments/assets/58b2b355-1184-4eb3-bbd7-232b6f928ed4" width="200"/></td>
+      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 19 20" src="https://github.com/user-attachments/assets/5cb1192f-aa99-47ec-98a0-1ad12e3d79aa" width="200"></td>
     </tr>
     <tr>
       <td align="center">Мероприятие</td>
