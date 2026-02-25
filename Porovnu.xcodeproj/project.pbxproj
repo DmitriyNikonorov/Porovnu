@@ -10,9 +10,22 @@
 		5A44CDD92F311EC300C83030 /* Porovnu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Porovnu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5AECA3DA2F4E49B400142F68 /* Exceptions for "Porovnu" folder in "Porovnu" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5A44CDD82F311EC300C83030 /* Porovnu */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5A44CDDB2F311EC300C83030 /* Porovnu */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5AECA3DA2F4E49B400142F68 /* Exceptions for "Porovnu" folder in "Porovnu" target */,
+			);
 			path = Porovnu;
 			sourceTree = "<group>";
 		};
