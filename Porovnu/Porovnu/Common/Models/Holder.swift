@@ -20,7 +20,6 @@ struct Holder: Hashable, Identifiable {
     var amount: Double
     /// Является ли плательщиком
     let isPayer: Bool
-//    let type: HolderType
 
     init(id: UUID = UUID(), spendingId: UUID, contributorId: UUID, contributorName: String, amount: Double, isPayer: Bool) {
         self.id = id

@@ -11,7 +11,6 @@ enum ScreenType {
     case home(title: String)
     case creationEvent(title: String)
     case event(title: String)
-//    case editEvent(title: Binding<String>)
     case editEvent(title: String)
     case editSpending(title: String)
 }

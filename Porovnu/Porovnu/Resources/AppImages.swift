@@ -19,6 +19,7 @@ enum AppImages {
     case edit
     case save
     case checklistChecked
+
     case arrowRight
 
     var sring: String {
