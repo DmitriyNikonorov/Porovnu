@@ -2,7 +2,7 @@
 ### Никакой математики на ходу. Только честный счет.
 
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift)](https://swift.org)
-[![Platform](https://img.shields.io/badge/Platform-iOS%2017.0+-blue?logo=apple)](https://developer.apple.com/ios/)
+[![Platform](https://img.shields.io/badge/Platform-iOS%2018.0+-blue?logo=apple)](https://developer.apple.com/ios/)
 [![SwiftData](https://img.shields.io/badge/Data-SwiftData-green)]()
 [![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-purple?logo=swift)]()
 
