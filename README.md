@@ -162,10 +162,11 @@ Porovnu/
 
 ## Скриншоты
 
+
 <div align="center">
   <table>
     <tr>
-      <td><img src="https://via.placeholder.com/300x600/2E2E2E/FFFFFF?text=Список+мероприятий" width="200"></td>
+      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 18 04" src="https://github.com/user-attachments/assets/58b2b355-1184-4eb3-bbd7-232b6f928ed4" width="200"/></td>
       <td><img src="https://via.placeholder.com/300x600/2E2E2E/FFFFFF?text=Детали+трат" width="200"></td>
       <td><img src="https://via.placeholder.com/300x600/2E2E2E/FFFFFF?text=Баланс" width="200"></td>
     </tr>
