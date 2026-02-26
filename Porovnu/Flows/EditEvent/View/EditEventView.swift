@@ -128,12 +128,11 @@ private extension EditEventView {
                     Spacer()
                 }
 
-                ForEach(Bindable(viewModel).contributors, id: \.id) { contributor in
-                    let index = Bindable(viewModel).contributors.firstIndex(where: { $0.id == contributor.id }) ?? 0
+                ForEach(Bindable(viewModel).contributors.indices, id: \.self) { index in
                     ContributorInfoView(
                         placeholder: "Участник \((index) + 1)",
                         isFocused: $isFocused,
-                        contributor: contributor,
+                        contributor: bindingForContributor(at: index, in: Bindable(viewModel).contributors),
                         onAction: onAction,
                         isDeleteMode: $isDeleteMode,
                         isKeyboardShow: $isKeyboardShow
@@ -455,6 +454,27 @@ private extension EditEventView {
                 title: "Нельзя удалить участника",
                 message: "В мероприятии должен быть хотя бы один участник"
             )
+        )
+    }
+
+    func bindingForContributor(at index: Int, in items: Binding<[Contributor]>) -> Binding<Contributor> {
+        Binding(
+            get: {
+                guard index < items.wrappedValue.count else {
+                    return Contributor(
+                        id: UUID(),
+                        name: String(),
+                        spendings: []
+                    )
+                }
+                return items.wrappedValue[index]
+            },
+            set: { newValue in
+                guard index < items.wrappedValue.count else {
+                    return
+                }
+                items.wrappedValue[index] = newValue
+            }
         )
     }
 }
