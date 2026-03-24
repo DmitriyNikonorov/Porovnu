@@ -2,13 +2,9 @@
 ### Никакой математики на ходу. Только честный счет.
 
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift)](https://swift.org)
-[![Platform](https://img.shields.io/badge/Platform-iOS%2017.0+-blue?logo=apple)](https://developer.apple.com/ios/)
+[![Platform](https://img.shields.io/badge/Platform-iOS%2018.0+-blue?logo=apple)](https://developer.apple.com/ios/)
 [![SwiftData](https://img.shields.io/badge/Data-SwiftData-green)]()
 [![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-purple?logo=swift)]()
-
-<p align="center">
-  <img src="https://via.placeholder.com/800x400/2E2E2E/FFFFFF?text=Скриншот+приложения+Spliit" alt="Демо Spliit" width="80%">
-</p>
 
 ## О проекте
 
@@ -144,6 +140,7 @@ Porovnu/
 - [ ] Поддержка валют и конвертации
 - [ ] Категории трат (еда, жилье, транспорт)
 - [ ] Темная тема (iOS system appearance)
+- [ ] Поддержка Liquid Glass
 - [ ] Возможность отметить перевод как выполненный и "закрыть" долг
 - [ ] Поддержка валют (с возможностью выбора)
 - [ ] История всех операций с фильтрацией по дате и участникам
@@ -162,15 +159,16 @@ Porovnu/
 
 ## Скриншоты
 
+
 <div align="center">
   <table>
     <tr>
-      <td><img src="https://via.placeholder.com/300x600/2E2E2E/FFFFFF?text=Список+мероприятий" width="200"></td>
-      <td><img src="https://via.placeholder.com/300x600/2E2E2E/FFFFFF?text=Детали+трат" width="200"></td>
-      <td><img src="https://via.placeholder.com/300x600/2E2E2E/FFFFFF?text=Баланс" width="200"></td>
+      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 18 04" src="https://github.com/user-attachments/assets/b1a6cd99-5544-4d4c-bd2a-69c8ea872780" width="200"></td>
+      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 15 40" src="https://github.com/user-attachments/assets/a59d2557-a5bb-4ac8-a3d1-1cf6ec33809b" width="200"></td>
+      <td><img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-25 at 14 19 20" src="https://github.com/user-attachments/assets/5cb1192f-aa99-47ec-98a0-1ad12e3d79aa" width="200"></td>
     </tr>
     <tr>
-      <td align="center">Главный экран</td>
+      <td align="center">Мероприятие</td>
       <td align="center">Добавление траты</td>
       <td align="center">Итоговый баланс</td>
     </tr>
@@ -195,6 +193,7 @@ Porovnu/
 - UI/UX дизайна для мобильных приложений
 - Планирования развития продукта (roadmap)
 - Написания чистого, поддерживаемого кода
+- Закрывает мою маниакальную тягу всё считать :)
 
 ---
 
