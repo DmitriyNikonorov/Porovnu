@@ -129,49 +129,73 @@ private extension EditEventView {
                 }
 
                 ForEach(Bindable(viewModel).contributors.indices, id: \.self) { index in
-                    ContributorInfoView(
-                        placeholder: "Участник \((index) + 1)",
-                        isFocused: $isFocused,
-                        contributor: bindingForContributor(at: index, in: Bindable(viewModel).contributors),
-                        onAction: onAction,
-                        isDeleteMode: $isDeleteMode,
-                        isKeyboardShow: $isKeyboardShow
-                    )
-                    .padding(.vertical, 6)
+                    HStack {
+                        ContributorInfoView(
+                            isFocused: $isFocused,
+                            contributor: bindingForContributor(
+                                at: index,
+                                in: Bindable(viewModel).contributors
+                            ),
+                            isKeyboardShow: $isKeyboardShow,
+                            placeholder: "Участник \((index) + 1)",
+                            onAction: onAction
+                        )
+                        .padding(.vertical, 6)
+
+                       if isDeleteMode {
+                           Button {
+                               onAction(action:
+                                    .onDeleteContributor(viewModel.contributors[index].id)
+                               )
+                           } label: {
+                               HStack(spacing: 4) {
+                                   Image(systemName: "trash")
+                               }
+                               .foregroundStyle(Color.appColor(.red))
+                           }
+                           .padding(.horizontal, 16)
+                       }
+                    }
                 }
             }
             .padding(.horizontal)
             .foregroundStyle(Color.appColor(.backgroundSecondary))
-            Button {
-                withAnimation {
-                    viewModel.addContributor()
-                }
-            } label: {
-                HStack {
-                    Spacer()
-                    AppImages.personBadgePlus.image
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                        .foregroundStyle(Color.appColor(.orangeBrand))
-                    Spacer()
-                }
-            }
-            .scrollTargetLayout()
-            .padding(.top, 16)
-            .buttonStyle(PlainButtonStyle())
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .visibilityTracker(
-                isVisible: $isAddButtonInListVisible,
-                coordinateSpace: coordinateSpaceName
-            )
-            .opacity(isAddButtonInListVisible ? 1 : 0)
-            .disabled(!isAddButtonInListVisible)
+
+            /// Button
+            addContributorButton()
         }
         .onChange(of: isKeyboardShow) { _, isKeyboardVisible in
             keyboardHeight = isKeyboardVisible ? 335 : 0
         }
         .contentMargins(.bottom, keyboardHeight, for: .scrollContent)
+    }
+
+    func addContributorButton() -> some View {
+        Button {
+            withAnimation {
+                viewModel.addContributor()
+            }
+        } label: {
+            HStack {
+                Spacer()
+                AppImages.personBadgePlus.image
+                    .resizable()
+                    .frame(width: 36, height: 36)
+                    .foregroundStyle(Color.appColor(.orangeBrand))
+                Spacer()
+            }
+        }
+        .scrollTargetLayout()
+        .padding(.top, 16)
+        .buttonStyle(PlainButtonStyle())
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+        .visibilityTracker(
+            isVisible: $isAddButtonInListVisible,
+            coordinateSpace: coordinateSpaceName
+        )
+        .opacity(isAddButtonInListVisible ? 1 : 0)
+        .disabled(!isAddButtonInListVisible)
     }
 
     func buttonStack() -> some View {
@@ -347,6 +371,7 @@ private extension EditEventView {
                     return
                 }
 
+                isDeleteMode = false
                 navigateToEventListWithSave(true)
             }
         )

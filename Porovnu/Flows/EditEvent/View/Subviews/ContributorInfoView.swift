@@ -23,12 +23,12 @@ struct ContributorInfoView: View {
 
     // MARK: - Public properties
 
-    let placeholder: String
     @FocusState.Binding var isFocused: Bool
     @Binding var contributor: Contributor
-    var onAction: (EditViewAction) -> Void
-    @Binding var isDeleteMode: Bool
     @Binding var isKeyboardShow: Bool
+
+    let placeholder: String
+    var onAction: (EditViewAction) -> Void
 
     // MARK: - Body
 
@@ -68,17 +68,6 @@ struct ContributorInfoView: View {
                             .stroke(Color.appColor(.orangeBrand).opacity(0.3), lineWidth: 1)
                     )
             )
-            if isDeleteMode {
-                Button {
-                    onAction(.onDeleteContributor(contributor.id))
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "trash")
-                    }
-                    .foregroundStyle(Color.appColor(.red))
-                }
-                .padding(.horizontal, 16)
-            }
         }
     }
 }
