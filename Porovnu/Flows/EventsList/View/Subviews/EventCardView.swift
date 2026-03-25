@@ -29,13 +29,6 @@ struct EventCardView: View {
                     .foregroundStyle(Color.appColor(.textTertiary))
 
                 Spacer()
-
-                // Дата создания (если есть в модели)
-//                if let date = event.createdAt {
-//                    Text(date, style: .date)
-//                        .font(.caption2)
-//                        .foregroundStyle(.white.opacity(0.6))
-//                }
             }
         }
         .padding(.horizontal, 16)

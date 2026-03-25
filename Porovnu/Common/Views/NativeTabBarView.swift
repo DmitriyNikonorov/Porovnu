@@ -17,7 +17,7 @@ struct NativeTabBarView: View {
     init(assembler: DefaultAssembler) {
         self.assembler = assembler
         _homeViewModel = .init(wrappedValue: assembler.resolveEditEventViewModel(assembler: assembler))
-        // Глобальная настройка цветов для TabView (iOS 26)
+        /// Глобальная настройка цветов для TabView (iOS 26)
         UITabBar.appearance().unselectedItemTintColor = UIColor(Color.appColor(.grayBrand))
         UITabBar.appearance().tintColor = UIColor(Color.appColor(.orangeBrand))
     }
@@ -62,16 +62,6 @@ struct NativeTabBarView: View {
             NavigationStack(path: Bindable(navigationCoordinator).profilePath) {
                 ProfileView()
                     .environment(navigationCoordinator)
-//                    .navigationDestination(for: AppRoute.self) { route in
-//                        switch route {
-//                        case .createEvent:
-//                            assembler.resolveCreateEventView()
-//
-//
-//                        case .eventDetails(let event):
-//                            EventView(event: event)
-//                        }
-//                    }
             }
             .tabItem {
                 tabItemView(for: .profile)

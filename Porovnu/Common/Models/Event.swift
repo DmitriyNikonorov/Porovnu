@@ -43,16 +43,3 @@ extension Event {
         Event(id: id, name: name, contributors: newContributors)
     }
 }
-
-// Нужно ли?
-enum TransactionType {
-    case spending, debt
-}
-
-// Нужно ли?
-// Долг между двумя участниками
-struct Debt {
-    let fromId: UUID  // Кто должен
-    let toId: UUID    // Кому должен
-    var amount: Double
-}

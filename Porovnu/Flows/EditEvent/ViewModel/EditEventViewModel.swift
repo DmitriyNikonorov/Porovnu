@@ -122,14 +122,12 @@ final class EditEventViewModel: ViewModel {
         self.assembler = assembler
         self.dataBaseManager = dataBaseManager
         super.init()
-        print("🟢 init")
     }
 
     func loadInitialEvent() {
         guard !isInitialEventLoaded else {
             return
         }
-        print("🟢 loadInitialEvent")
         isInitialEventLoaded = true
         let eventId = UserDefaultsManager.fetchLastOpenedEventId() ?? UUID()
         setupEvent(to: eventId)
@@ -153,14 +151,12 @@ final class EditEventViewModel: ViewModel {
 
     func setupEvent(to eventId: UUID) {
         let event = self.dataBaseManager.fetchEvent(by: eventId)
-        print("🟢 setupEvent")
         setEventData(event)
         calculateEvent(event)
         UserDefaultsManager.setLastOpenedEventId(eventId)
     }
 
     func createNewEvent() {
-        print("🟢 createNewEvent")
         let newEvent = Event(contributors: [Contributor()])
         setEventData(newEvent)
         calculateEvent(newEvent)
@@ -322,7 +318,6 @@ private extension EditEventViewModel {
                 and: debts ?? []
             )
             contributorTotalInfo.append(infoModel)
-            print("🟢 \(infoModel)")
         }
 
         contributorTotalInfoList = contributorTotalInfo

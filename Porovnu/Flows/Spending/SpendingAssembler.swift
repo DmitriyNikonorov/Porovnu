@@ -7,12 +7,6 @@
 
 protocol SpendingAssembler {
     func resolveSpendingView(viewModel: SpendingViewModel) -> SpendingView
-//    func resolveSpendingViewModel(
-//        creditor: Contributor,
-//        contributors: [Contributor],
-//        spending: Spending?,
-//        onSave: @escaping (Spending?) -> Void
-//    ) -> SpendingViewModel
     func resolveSpendingViewModel(
         dto: EditSpendingDto
     ) -> SpendingViewModel
@@ -26,21 +20,6 @@ extension SpendingAssembler {
 }
 
 extension SpendingAssembler where Self: DefaultAssembler {
-
-//    func resolveSpendingViewModel(
-//        creditor: Contributor,
-//        contributors: [Contributor],
-//        spending: Spending?,
-//        onSave: @escaping (Spending?) -> Void
-//    ) -> SpendingViewModel {
-//        SpendingViewModel(
-//            creditor: creditor,
-//            contributors: contributors,
-//            spending: spending,
-//            dataBaseManager: resolveDataBaseManager(),
-//            onSave: onSave
-//        )
-//    }
     func resolveSpendingViewModel(
         dto: EditSpendingDto
     ) -> SpendingViewModel {

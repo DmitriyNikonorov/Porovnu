@@ -15,9 +15,9 @@ struct CreateEventView: View {
 
     @State private var showTopToast = false
 
-    // Добавляем состояние для отслеживания видимости кнопки
+    /// Добавляем состояние для отслеживания видимости кнопки
     @State private var isAddButtonInListVisible = true
-    // Имя координатного пространства для отслеживания
+    /// Имя координатного пространства для отслеживания
     private let coordinateSpaceName = "scrollView"
     @State var isKeyboardShow: Bool = false
 
@@ -41,7 +41,7 @@ struct CreateEventView: View {
                 .buttonStyle(PlainButtonStyle())
                 .frame(width: 48, height: 48)
                 .padding(.bottom, 60)
-                // Показываем кнопку только когда кнопка в листе НЕ видна
+                /// Показываем кнопку только когда кнопка в листе НЕ видна
                 .opacity(isAddButtonInListVisible ? 0 : 1)
                 .disabled(isAddButtonInListVisible)
             }

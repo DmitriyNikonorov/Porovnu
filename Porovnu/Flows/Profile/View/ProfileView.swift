@@ -14,8 +14,8 @@ struct ProfileView: View {
     var body: some View {
         Text("Profile")
             .navigationBarTitle("Profile")
-            .navigationBarItems(trailing: Button("Logout") {
-//                self.navagationCoordinator.navigate(to:
-            })
+            .navigationBarItems(
+                trailing: Button("Logout") {}
+            )
     }
 }

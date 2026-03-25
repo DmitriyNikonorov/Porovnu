@@ -20,7 +20,4 @@ final class DebtsViewModel: ViewModel {
         self.event = event
         super.init()
     }
-
-
-
 }

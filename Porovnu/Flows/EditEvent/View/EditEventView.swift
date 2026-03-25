@@ -260,8 +260,10 @@ private extension EditEventView {
                     Spacer()
                 }
                 ForEach(viewModel.contributorTotalInfoList, id: \.id) { contributorTotalInfo in
+                    
                     /// Начало View
                     VStack(alignment: .leading) {
+
                         /// Заголовок блока
                         Text(contributorTotalInfo.name)
                             .font(.system(size: 22, weight: .bold))
@@ -269,6 +271,7 @@ private extension EditEventView {
                             .padding(.top, 12)
                             .padding(.bottom, 8)
                             .padding(.horizontal)
+
                         /// Расходы на всё мероприятие
                         VStack(spacing: 10) {
                             HStack {

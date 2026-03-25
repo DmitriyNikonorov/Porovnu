@@ -25,13 +25,6 @@ struct UserDefaultsManager {
         return UUID(uuidString: string)
     }
 
-
-//    private func loadAll() {
-//        Task { @MainActor in
-//            settings.theme = loadCodable(Theme.self, key: "theme") ?? .system
-//        }
-//    }
-
     // MARK: - Save Async
 
     private func saveCodable<T: Codable>(_ value: T, key: String) async {
@@ -39,7 +32,7 @@ struct UserDefaultsManager {
             let data = try JSONEncoder().encode(value)
             UserDefaults.standard.set(data, forKey: key)
         } catch {
-            print("UserDefaults save error: \(error)")
+            debugPrint("UserDefaults save error: \(error)")
         }
     }
 
