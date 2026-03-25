@@ -157,7 +157,7 @@ private extension EditEventView {
                                 )
                             } label: {
                                 HStack(spacing: 4) {
-                                    Image(systemName: "trash")
+                                    AppImages.trash.image
                                 }
                                 .foregroundStyle(Color.appColor(.red))
                             }
