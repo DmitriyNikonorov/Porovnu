@@ -121,7 +121,9 @@ Pods/
 
 ### Xcode ###
 ## User settings
+*.xcuserdatad/
 xcuserdata/
+*.xcuserstate
 
 ## Xcode 8 and earlier
 *.xcscmblueprint
@@ -131,6 +133,7 @@ xcuserdata/
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
+
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
