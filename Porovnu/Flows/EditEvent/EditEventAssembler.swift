@@ -7,7 +7,6 @@
 
 protocol EditEventAssembler {
     func resolveEditEventView(viewModel: EditEventViewModel) -> EditEventView
-//    func resolveEditEventViewModel(dto: EditEventDto, assembler: SpendingAssembler) -> EditEventViewModel
     func resolveEditEventViewModel(assembler: SpendingAssembler) -> EditEventViewModel
 }
 

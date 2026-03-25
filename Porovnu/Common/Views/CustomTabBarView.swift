@@ -46,11 +46,10 @@ struct CustomTabBarView: View {
                                     .environment(navigationCoordinator)
 
                                 case let .editSpending(dto):
-
                                     let spendingViewModel = assembler.resolveSpendingViewModel(
                                         dto: dto
                                     )
-                                        assembler.resolveSpendingView(viewModel: spendingViewModel)
+                                    assembler.resolveSpendingView(viewModel: spendingViewModel)
                                         .environment(navigationCoordinator)
                                 }
                             }
