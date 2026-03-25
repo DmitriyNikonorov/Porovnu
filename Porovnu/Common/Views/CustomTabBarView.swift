@@ -28,14 +28,14 @@ struct CustomTabBarView: View {
                         assembler.resolveEditEventView(viewModel: homeViewModel)
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
-                                case let .eventDetails(event):
-                                    assembler.resolveEventView(
-                                        viewModel: assembler.resolveEventViewModel(
-                                            event: event,
-                                            assembler: assembler
-                                        )
-                                    )
-                                    .environment(navigationCoordinator)
+//                                case let .eventDetails(event):
+//                                    assembler.resolveEventView(
+//                                        viewModel: assembler.resolveEventViewModel(
+//                                            event: event,
+//                                            assembler: assembler
+//                                        )
+//                                    )
+//                                    .environment(navigationCoordinator)
 
                                 case let .eventList(dto):
                                     assembler.resolveEventsListView(

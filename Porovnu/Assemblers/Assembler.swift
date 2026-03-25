@@ -9,7 +9,7 @@ import Foundation
 
 protocol Assembler:
     EventsListAssembler,
-    EventAssembler,
+//    EventAssembler,
     EditEventAssembler,
     SpendingAssembler,
     ManagerAssembler {

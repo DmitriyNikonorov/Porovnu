@@ -6,14 +6,7 @@
 //
 
 protocol DebtsAssembler {
-    func resolveDebtsView(viewModel: EditCircleViewModel) -> DebtsView
     func resolveDebtsViewModel(event: Event) -> DebtsViewModel
-}
-
-extension EventAssembler {
-    func resolveDebtsView(viewModel: DebtsViewModel) -> DebtsView {
-        DebtsView(viewModel: viewModel)
-    }
 }
 
 extension DebtsAssembler where Self: DefaultAssembler {
