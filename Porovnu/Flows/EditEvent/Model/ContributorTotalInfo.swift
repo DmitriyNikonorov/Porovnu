@@ -47,22 +47,6 @@ struct ContributorTotalInfo: Hashable, Identifiable {
     var totalSelfSpendings: Double {
         selfSpendings + abs(totalDebt)
     }
-
-
-
-    /// Словарь трат - [id должника: общая сумма трат]
-//    var spendingDict = [UUID: Double]()
-//    /// Словарь долгов - [id кредитора: общая сумма долга]
-//    var debtsDict = [UUID: Double]()
-//    /// Словарь балансов
-//    var balanceDict = [UUID: Double]()
-//
-//    var totalSpending: Double = .zero
-//    var totalDebts: Double = .zero
-//
-//    var balance: Double {
-//        totalSpending - totalDebts
-//    }
 }
 
 struct InfoItem: Hashable, Identifiable {

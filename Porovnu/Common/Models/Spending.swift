@@ -26,16 +26,6 @@ struct Spending: Hashable, Identifiable {
         self.totalAmount = totalAmount
         self.holders = holders
     }
-//    let transactionType: TransactionType
-
-    // НЕ ОЧЕНЬ АКТУАЛЬНО УЖЕ - Удобно получаение в виде словаря
-//    var debtorsForThisSpending: [UUID: Double] {
-//        //(должники по трате id участника и сумма долга)
-//        get{             return holders.reduce(into: [:]) { result, debt in 
-//            result[debt.id] = debt.summ 
-//        } 
-//        } 
-//    }
 
     init(dataBaseModel: SpendingModel) {
         let holders = dataBaseModel.holders.map {

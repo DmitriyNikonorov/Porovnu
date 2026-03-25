@@ -131,7 +131,6 @@ struct NavigationBarModifier: ViewModifier {
     }
 
     @ToolbarContentBuilder
-//    private func editEventScreenToolbar(title: Binding<String>) -> some ToolbarContent {
     private func editEventScreenToolbar(title: String) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             if let action = leadingButtonAction?.firstAction {
@@ -145,7 +144,6 @@ struct NavigationBarModifier: ViewModifier {
         }
 
         ToolbarItem(placement: .principal) {
-//            Text(title.wrappedValue)
             Text(title)
                 .font(.headline)
                 .foregroundStyle(Color.appColor(.orangeBrand))
@@ -153,7 +151,7 @@ struct NavigationBarModifier: ViewModifier {
 
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             if let trailingButtonAction = trailingButtonAction {
-                // ПЕРВАЯ кнопка (сохранить)
+                /// ПЕРВАЯ кнопка (сохранить)
                 if trailingButtonAction.isShowFirstAction.wrappedValue == true {
                     Button {
                         trailingButtonAction.firstAction?()
@@ -163,7 +161,7 @@ struct NavigationBarModifier: ViewModifier {
                     }
                 }
 
-                // ВТОРАЯ кнопка (дополнительная)
+                /// ВТОРАЯ кнопка (дополнительная)
                 if trailingButtonAction.isShowSecondAction.wrappedValue == true {
                     Button {
                         trailingButtonAction.secondAction?()

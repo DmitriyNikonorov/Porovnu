@@ -39,7 +39,7 @@ extension ModelContext {
         do {
             insert(model)
             try save()
-            print("✅ save event in database")
+            debugPrint("✅ save event in database")
         } catch {
             debugPrint("Save error: \(error)")
         }
@@ -63,7 +63,7 @@ extension ModelContext {
             delete(model)
 
             try save()
-            print("✅ delete \(type) id: \(id.uuidString.prefix(8))")
+            debugPrint("✅ delete \(type) id: \(id.uuidString.prefix(8))")
         } catch {
             debugPrint("Delete error: \(error)")
         }

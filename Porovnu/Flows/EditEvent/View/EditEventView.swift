@@ -43,7 +43,9 @@ struct EditEventView: View {
                 spendingsContent: {
                     ZStack {
                         scrollView()
-                        buttonStack()
+                        if !isDeleteMode {
+                            addContributorButtonFixed()
+                        }
                     }
                 },
                 debtsContent: {
@@ -78,13 +80,14 @@ struct EditEventView: View {
         )
         .alert("Вы пытаетесь уйти без сохранения!", isPresented: $showBackNavigationAlert) {
             Button("Сохранить и выйти") {
+                isDeleteMode = false
                 navigateToEventListWithSave(true)
             }
             Button("Выйти без сохранения") {
+                isDeleteMode = false
                 navigateToEventListWithSave(false)
             }
-            Button("Остаться", role: .cancel) {
-            }
+            Button("Остаться", role: .cancel) {}
         } message: {
             Text("Без сохранения все изменения будут потеряны")
         }
@@ -114,6 +117,11 @@ private extension EditEventView {
                         type: .largeTitle,
                         isKeyboardShow: $isKeyboardShow
                     )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.appColor(.backgroundSecondary).opacity(isDeleteMode ? 0.5 : 0))
+                            .allowsHitTesting(isDeleteMode)
+                    )
                 }
                 .padding(.top, 40)
                 .padding(.bottom, 10)
@@ -129,44 +137,43 @@ private extension EditEventView {
                 }
 
                 ForEach(Bindable(viewModel).contributors.indices, id: \.self) { index in
-                    ContributorInfoView(
-                        placeholder: "Участник \((index) + 1)",
-                        isFocused: $isFocused,
-                        contributor: bindingForContributor(at: index, in: Bindable(viewModel).contributors),
-                        onAction: onAction,
-                        isDeleteMode: $isDeleteMode,
-                        isKeyboardShow: $isKeyboardShow
-                    )
-                    .padding(.vertical, 6)
+                    HStack {
+                        ContributorInfoView(
+                            isFocused: $isFocused,
+                            contributor: bindingForContributor(
+                                at: index,
+                                in: Bindable(viewModel).contributors
+                            ),
+                            isDeleteMode: $isDeleteMode,
+                            isKeyboardShow: $isKeyboardShow,
+                            placeholder: "Участник \((index) + 1)",
+                            onAction: onAction
+                        )
+                        .padding(.vertical, 6)
+
+                        if isDeleteMode {
+                            Button {
+                                onAction(
+                                    action: .onDeleteContributor(viewModel.contributors[index].id)
+                                )
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "trash")
+                                }
+                                .foregroundStyle(Color.appColor(.red))
+                            }
+                            .padding(.horizontal, 16)
+                        }
+                    }
                 }
             }
             .padding(.horizontal)
             .foregroundStyle(Color.appColor(.backgroundSecondary))
-            Button {
-                withAnimation {
-                    viewModel.addContributor()
-                }
-            } label: {
-                HStack {
-                    Spacer()
-                    AppImages.personBadgePlus.image
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                        .foregroundStyle(Color.appColor(.orangeBrand))
-                    Spacer()
-                }
-            }
-            .scrollTargetLayout()
-            .padding(.top, 16)
-            .buttonStyle(PlainButtonStyle())
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .visibilityTracker(
-                isVisible: $isAddButtonInListVisible,
-                coordinateSpace: coordinateSpaceName
-            )
-            .opacity(isAddButtonInListVisible ? 1 : 0)
-            .disabled(!isAddButtonInListVisible)
+
+            /// Button
+            addContributorButtonScrollable()
+                .opacity(isDeleteMode ? 0 : 1)
+
         }
         .onChange(of: isKeyboardShow) { _, isKeyboardVisible in
             keyboardHeight = isKeyboardVisible ? 335 : 0
@@ -174,7 +181,37 @@ private extension EditEventView {
         .contentMargins(.bottom, keyboardHeight, for: .scrollContent)
     }
 
-    func buttonStack() -> some View {
+    // MARK: - Add Button
+
+    func addContributorButtonScrollable() -> some View {
+        Button {
+            withAnimation {
+                viewModel.addContributor()
+            }
+        } label: {
+            HStack {
+                Spacer()
+                AppImages.personBadgePlus.image
+                    .resizable()
+                    .frame(width: 36, height: 36)
+                    .foregroundStyle(Color.appColor(.orangeBrand))
+                Spacer()
+            }
+        }
+        .scrollTargetLayout()
+        .padding(.top, 16)
+        .buttonStyle(PlainButtonStyle())
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+        .visibilityTracker(
+            isVisible: $isAddButtonInListVisible,
+            coordinateSpace: coordinateSpaceName
+        )
+        .opacity(isAddButtonInListVisible ? 1 : 0)
+        .disabled(!isAddButtonInListVisible)
+    }
+
+    func addContributorButtonFixed() -> some View {
         VStack {
             Spacer()
             Button {
@@ -223,8 +260,10 @@ private extension EditEventView {
                     Spacer()
                 }
                 ForEach(viewModel.contributorTotalInfoList, id: \.id) { contributorTotalInfo in
+                    
                     /// Начало View
                     VStack(alignment: .leading) {
+
                         /// Заголовок блока
                         Text(contributorTotalInfo.name)
                             .font(.system(size: 22, weight: .bold))
@@ -232,6 +271,7 @@ private extension EditEventView {
                             .padding(.top, 12)
                             .padding(.bottom, 8)
                             .padding(.horizontal)
+
                         /// Расходы на всё мероприятие
                         VStack(spacing: 10) {
                             HStack {
@@ -346,11 +386,10 @@ private extension EditEventView {
                     showBackNavigationAlert = true
                     return
                 }
-
+                isDeleteMode = false
                 navigateToEventListWithSave(true)
             }
         )
-
     }
 
     var trailingButtonAction: NavigationBarButtonActionType {
@@ -372,9 +411,7 @@ private extension EditEventView {
     }
 
     func navigateToEventListWithSave(_ withSave: Bool) {
-        if withSave {
-            viewModel.saveAllChanges()
-        }
+        withSave ? viewModel.saveAllChanges() : viewModel.resetAllChanges()
 
         navigationCoordinator.navigate(
             to: .eventList(

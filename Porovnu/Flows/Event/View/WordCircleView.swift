@@ -18,7 +18,7 @@ struct WordCircleView: View {
 
     let connections: [WordConnection]? // Опциональные связи между именами
 
-    // Инициализатор для работы с @Binding из родителя
+    /// Инициализатор для работы с @Binding из родителя
     init(angle: Binding<Angle>? = nil,
          prevAngle: Binding<Angle>? = nil,
          words: [String],

@@ -56,7 +56,6 @@ struct EventListDto: Equatable, Hashable {
 
 enum AppRoute: Hashable {
     case eventDetails(Event)
-//    case editEvent(EditEventDto)
     case editSpending(EditSpendingDto)
     case eventList(EventListDto)
 }
@@ -215,15 +214,15 @@ private extension NavigationCoordinator {
         let routeDescription = route.map { "to \($0)" } ?? ""
         let actionDescription = action.map { "\($0)" } ?? ""
         let tabDiscription = selectedTab.rawValue
-        print("Current tab: \(tabDiscription)\nNavigationCoordinator: \(actionDescription) \(routeDescription)")
-        print("Path count: \(homePath.count)")
-        print("")
+        debugPrint("Current tab: \(tabDiscription)\nNavigationCoordinator: \(actionDescription) \(routeDescription)")
+        debugPrint("Path count: \(homePath.count)")
+        debugPrint("")
         #endif
     }
 }
 
 
-
+// FIXME: - Убрать когда буду делать диплинки
 // 1. Deeplink Handling
 //extension NavigationCoordinator {
 //    func handleDeepLink(_ url: URL) {
