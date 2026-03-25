@@ -43,7 +43,9 @@ struct EditEventView: View {
                 spendingsContent: {
                     ZStack {
                         scrollView()
-                        buttonStack()
+                        if !isDeleteMode {
+                            addContributorButtonFixed()
+                        }
                     }
                 },
                 debtsContent: {
@@ -78,13 +80,14 @@ struct EditEventView: View {
         )
         .alert("Вы пытаетесь уйти без сохранения!", isPresented: $showBackNavigationAlert) {
             Button("Сохранить и выйти") {
+                isDeleteMode = false
                 navigateToEventListWithSave(true)
             }
             Button("Выйти без сохранения") {
+                isDeleteMode = false
                 navigateToEventListWithSave(false)
             }
-            Button("Остаться", role: .cancel) {
-            }
+            Button("Остаться", role: .cancel) {}
         } message: {
             Text("Без сохранения все изменения будут потеряны")
         }
@@ -113,6 +116,11 @@ private extension EditEventView {
                         text: Bindable(viewModel).eventName,
                         type: .largeTitle,
                         isKeyboardShow: $isKeyboardShow
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.appColor(.backgroundSecondary).opacity(isDeleteMode ? 0.5 : 0))
+                            .allowsHitTesting(isDeleteMode)
                     )
                 }
                 .padding(.top, 40)
@@ -145,7 +153,8 @@ private extension EditEventView {
 
                         if isDeleteMode {
                             Button {
-                                onAction(action: .onDeleteContributor(viewModel.contributors[index].id)
+                                onAction(
+                                    action: .onDeleteContributor(viewModel.contributors[index].id)
                                 )
                             } label: {
                                 HStack(spacing: 4) {
@@ -162,7 +171,9 @@ private extension EditEventView {
             .foregroundStyle(Color.appColor(.backgroundSecondary))
 
             /// Button
-            addContributorButton()
+            addContributorButtonScrollable()
+                .opacity(isDeleteMode ? 0 : 1)
+
         }
         .onChange(of: isKeyboardShow) { _, isKeyboardVisible in
             keyboardHeight = isKeyboardVisible ? 335 : 0
@@ -170,7 +181,9 @@ private extension EditEventView {
         .contentMargins(.bottom, keyboardHeight, for: .scrollContent)
     }
 
-    func addContributorButton() -> some View {
+    // MARK: - Add Button
+
+    func addContributorButtonScrollable() -> some View {
         Button {
             withAnimation {
                 viewModel.addContributor()
@@ -198,7 +211,7 @@ private extension EditEventView {
         .disabled(!isAddButtonInListVisible)
     }
 
-    func buttonStack() -> some View {
+    func addContributorButtonFixed() -> some View {
         VStack {
             Spacer()
             Button {
@@ -395,9 +408,7 @@ private extension EditEventView {
     }
 
     func navigateToEventListWithSave(_ withSave: Bool) {
-        if withSave {
-            viewModel.saveAllChanges()
-        }
+        withSave ? viewModel.saveAllChanges() : viewModel.resetAllChanges()
 
         navigationCoordinator.navigate(
             to: .eventList(
