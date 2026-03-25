@@ -25,6 +25,7 @@ struct ContributorInfoView: View {
 
     @FocusState.Binding var isFocused: Bool
     @Binding var contributor: Contributor
+    @Binding var isDeleteMode: Bool
     @Binding var isKeyboardShow: Bool
 
     let placeholder: String
@@ -57,8 +58,7 @@ struct ContributorInfoView: View {
                     spendingVStack()
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
+            .padding(.all, 16)
             .frame(minHeight: 60)
             .background(
                 RoundedRectangle(cornerRadius: 16)
@@ -67,6 +67,11 @@ struct ContributorInfoView: View {
                         RoundedRectangle(cornerRadius: 16)
                             .stroke(Color.appColor(.orangeBrand).opacity(0.3), lineWidth: 1)
                     )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.appColor(.background).opacity(isDeleteMode ? 0.5 : 0))
+                    .allowsHitTesting(isDeleteMode)
             )
         }
     }

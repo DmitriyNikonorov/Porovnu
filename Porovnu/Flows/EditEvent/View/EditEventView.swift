@@ -136,25 +136,25 @@ private extension EditEventView {
                                 at: index,
                                 in: Bindable(viewModel).contributors
                             ),
+                            isDeleteMode: $isDeleteMode,
                             isKeyboardShow: $isKeyboardShow,
                             placeholder: "Участник \((index) + 1)",
                             onAction: onAction
                         )
                         .padding(.vertical, 6)
 
-                       if isDeleteMode {
-                           Button {
-                               onAction(action:
-                                    .onDeleteContributor(viewModel.contributors[index].id)
-                               )
-                           } label: {
-                               HStack(spacing: 4) {
-                                   Image(systemName: "trash")
-                               }
-                               .foregroundStyle(Color.appColor(.red))
-                           }
-                           .padding(.horizontal, 16)
-                       }
+                        if isDeleteMode {
+                            Button {
+                                onAction(action: .onDeleteContributor(viewModel.contributors[index].id)
+                                )
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "trash")
+                                }
+                                .foregroundStyle(Color.appColor(.red))
+                            }
+                            .padding(.horizontal, 16)
+                        }
                     }
                 }
             }
@@ -370,12 +370,10 @@ private extension EditEventView {
                     showBackNavigationAlert = true
                     return
                 }
-
                 isDeleteMode = false
                 navigateToEventListWithSave(true)
             }
         )
-
     }
 
     var trailingButtonAction: NavigationBarButtonActionType {
