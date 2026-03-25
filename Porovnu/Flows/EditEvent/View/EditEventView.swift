@@ -33,7 +33,6 @@ struct EditEventView: View {
         self.viewModel = viewModel
     }
 
-
     // MARK: - Body
 
     var body: some View {

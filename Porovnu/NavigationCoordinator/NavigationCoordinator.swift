@@ -55,8 +55,8 @@ struct EventListDto: Equatable, Hashable {
 
 
 enum AppRoute: Hashable {
-    case eventDetails(Event)
-//    case editEvent(EditEventDto)
+//    case eventDetails(Event)
+    case editEvent(EditEventDto)
     case editSpending(EditSpendingDto)
     case eventList(EventListDto)
 }
