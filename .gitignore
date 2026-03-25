@@ -123,6 +123,7 @@ Pods/
 ## User settings
 *.xcuserdatad/
 xcuserdata/
+*.xcuserstate
 
 ## Xcode 8 and earlier
 *.xcscmblueprint
