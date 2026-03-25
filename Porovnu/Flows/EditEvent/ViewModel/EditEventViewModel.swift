@@ -255,22 +255,25 @@ final class EditEventViewModel: ViewModel {
         self.eventSnapshot = updatedEvent
         calculateEvent(updatedEvent)
         UserDefaultsManager.setLastOpenedEventId(updatedEvent.id)
-        resetChanger()
+        resetAllChanges()
         if isNewEvent {
             isNewEvent = false
         }
+    }
+
+// MARK: - Reset All
+
+    func resetAllChanges() {
+        isEventNameChanged = false
+        isAnyContributorNameChanged = false
+        isAnySpendingChanged = false
+        isContributorCountChange = false
     }
 }
 
 // MARK: - Private
 
 private extension EditEventViewModel {
-    func resetChanger() {
-        isEventNameChanged = false
-        isAnyContributorNameChanged = false
-        isAnySpendingChanged = false
-        isContributorCountChange = false
-    }
 
     func calculateEvent(_ event: Event?) {
         calculateSpendings(for: event)
