@@ -12,6 +12,7 @@ struct EditEventView: View {
     // MARK: - Private properties
 
     private let viewModel: EditEventViewModel
+    // FIXME: - Remove string from here to enum
     private let coordinateSpaceName = "scrollView"
 
     @State private var keyboardHeight: CGFloat = 0
