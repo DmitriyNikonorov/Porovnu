@@ -53,22 +53,27 @@ final class ContributorModel {
 
 @Model
 final class SpendingModel {
+    /// ID траты
     @Attribute(.unique)
     var id: UUID
     /// Чья это трата
     @Relationship(deleteRule: .nullify)
     var contributor: ContributorModel?
-    /// название траты
+    /// Название траты
     var name: String
-    /// сумма всей траты
+    /// Сумма траты
     var totalAmount: Double
     /// Должники по трате
     @Relationship(deleteRule: .cascade, inverse: \HolderModel.spending)
     var holders: [HolderModel]
 
     @Transient var contributorId: UUID {
-        // FIXME: - не консистентно
-        contributor?.id ?? UUID()
+        guard let id = contributor?.id else {
+            debugPrint("🔴 Spending with id: \(id) has no contributor.id")
+            return UUID()
+        }
+
+        return id
     }
 
     init(id: UUID = UUID(), name: String, totalAmount: Double, holders: [HolderModel], contributor: ContributorModel? = nil) {

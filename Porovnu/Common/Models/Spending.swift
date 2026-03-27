@@ -6,15 +6,15 @@
 //
 
 import Foundation
-// Трата
+
 struct Spending: Hashable, Identifiable {
 
     let id: UUID
-    /// Чья это трата
+    /// ID участника, которому принадлежит эта трата
     let contributorId: UUID
     /// Название траты
     let name: String
-    /// Cумма всей траты
+    /// Cумма траты
     let totalAmount: Double
     /// Должники по трате
     let holders: [Holder]
@@ -26,16 +26,6 @@ struct Spending: Hashable, Identifiable {
         self.totalAmount = totalAmount
         self.holders = holders
     }
-//    let transactionType: TransactionType
-
-    // НЕ ОЧЕНЬ АКТУАЛЬНО УЖЕ - Удобно получаение в виде словаря
-//    var debtorsForThisSpending: [UUID: Double] {
-//        //(должники по трате id участника и сумма долга)
-//        get{             return holders.reduce(into: [:]) { result, debt in 
-//            result[debt.id] = debt.summ 
-//        } 
-//        } 
-//    }
 
     init(dataBaseModel: SpendingModel) {
         let holders = dataBaseModel.holders.map {

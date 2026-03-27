@@ -266,7 +266,7 @@ private extension SpendingView {
     var emptyStateView: some View {
         VStack {
             Spacer()
-            Text("Нет выбранных")
+            Text(Localized.SpendingView.noSelectedContributors)
                 .foregroundColor(.gray)
                 .frame(maxWidth: .infinity)
             Spacer()
@@ -274,8 +274,6 @@ private extension SpendingView {
         .frame(maxWidth: .infinity, minHeight: 100)
     }
 }
-
-// FIXME: - Доделат в следующей итерации
 
 //struct ShakeEffect: AnimatableModifier {
 //    var delta: CGFloat = 0

@@ -12,9 +12,6 @@ struct EditEventView: View {
     // MARK: - Private properties
 
     private let viewModel: EditEventViewModel
-    // FIXME: - Remove string from here to enum
-    private let coordinateSpaceName = "scrollView"
-
     @State private var keyboardHeight: CGFloat = 0
 
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
@@ -209,7 +206,7 @@ private extension EditEventView {
         .listRowSeparator(.hidden)
         .visibilityTracker(
             isVisible: $isAddButtonInListVisible,
-            coordinateSpace: coordinateSpaceName
+            coordinateSpace: СoordinateSpaceName.scrollViewName
         )
         .opacity(isAddButtonInListVisible ? 1 : 0)
         .disabled(!isAddButtonInListVisible)
