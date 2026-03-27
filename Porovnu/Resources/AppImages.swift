@@ -19,8 +19,8 @@ enum AppImages {
     case edit
     case save
     case checklistChecked
-
     case arrowRight
+    case plus
 
     var sring: String {
             switch self {
@@ -59,6 +59,9 @@ enum AppImages {
 
             case .arrowRight:
                 "arrow.right"
+
+            case .plus:
+                "plus"
             }
     }
 

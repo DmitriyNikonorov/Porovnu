@@ -61,7 +61,7 @@ struct NavigationBarModifier: ViewModifier {
                 Button {
                     trailingButtonAction.firstAction?()
                 } label: {
-                    Image(systemName: "plus")
+                    AppImages.plus.image
                         .foregroundStyle(Color.appColor(.orangeBrand))
                 }
             }
