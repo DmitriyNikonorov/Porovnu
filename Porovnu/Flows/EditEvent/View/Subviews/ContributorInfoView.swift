@@ -47,7 +47,7 @@ struct ContributorInfoView: View {
                     Button {
                         onAction(.onCreateSpending(contributor))
                     } label: {
-                        Text("Добавить трату")
+                        Text(Localized.ContributorInfoView.addSpending)
                             .foregroundStyle(Color.appColor(.orangeBrand))
                             .font(.system(size: 12, weight: .regular))
                     }

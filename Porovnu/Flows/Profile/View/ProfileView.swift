@@ -12,9 +12,9 @@ struct ProfileView: View {
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
 
     var body: some View {
-        Text("Profile")
-            .navigationBarTitle("Profile")
-            .navigationBarItems(trailing: Button("Logout") {
+        Text(Localized.ProfileView.profile)
+            .navigationBarTitle(Localized.ProfileView.profile)
+            .navigationBarItems(trailing: Button(Localized.ProfileView.logout) {
 //                self.navagationCoordinator.navigate(to:
             })
     }
