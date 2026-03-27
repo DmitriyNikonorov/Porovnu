@@ -23,8 +23,7 @@ struct EventCardView: View {
                 AppImages.person2Fill.image
                     .font(.caption)
                     .foregroundStyle(Color.appColor(.orangeBrand))
-
-                Text("\(event.contributorsCount) участников")
+                Text(Localized.EventCardView.contributorsCount(event.contributorsCount))
                     .font(.caption)
                     .foregroundStyle(Color.appColor(.textTertiary))
 

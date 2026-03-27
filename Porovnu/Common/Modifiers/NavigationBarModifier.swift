@@ -75,7 +75,7 @@ struct NavigationBarModifier: ViewModifier {
                 Button {
                     leadingButtonAction.firstAction?()
                 } label: {
-                    Text("Отмена")
+                    Text(Localized.Common.cancel)
                         .foregroundStyle(Color.appColor(.orangeBrand))
                 }
             }
@@ -93,7 +93,7 @@ struct NavigationBarModifier: ViewModifier {
 
         ToolbarItem(placement: .navigationBarTrailing) {
             if let action = trailingButtonAction?.firstAction {
-                Button("Создать", action: action)
+                Button(Localized.Common.create, action: action)
                     .foregroundStyle(Color.appColor(.orangeBrand))
             }
         }
@@ -106,7 +106,7 @@ struct NavigationBarModifier: ViewModifier {
                 Button {
                     leadingButtonAction.firstAction?()
                 } label: {
-                    Text("Назад")
+                    Text(Localized.Common.back)
                         .foregroundStyle(Color.appColor(.orangeBrand))
                 }
             }
@@ -184,7 +184,7 @@ struct NavigationBarModifier: ViewModifier {
                 Button {
                     leadingButtonAction.firstAction?()
                 } label: {
-                    Text("Назад")
+                    Text(Localized.Common.back)
                         .foregroundStyle(Color.appColor(.orangeBrand))
                 }
             }

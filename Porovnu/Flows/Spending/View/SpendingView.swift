@@ -34,20 +34,20 @@ struct SpendingView: View {
                     .padding(.vertical, 20)
                     .foregroundStyle(Color.appColor(.textSecondary))
 
-                Text("Название траты:")
+                Text(Localized.SpendingView.spendingNameLabel)
                     .foregroundStyle(Color.appColor(.textQuaternary))
                 CustomTextField(
-                    placeholder: "Введите название",
+                    placeholder: Localized.SpendingView.enterNamePlaceholder,
                     position: .single,
                     text: Bindable(viewModel).spendingName
                 )
 
-                Text("Общая суммма траты")
+                Text(Localized.SpendingView.totalAmountLabel)
                     .padding(.top, 12)
                     .foregroundStyle(Color.appColor(.textQuaternary))
                 AmountConvertTextField(
                     amount: Bindable(viewModel).spendingTotalAmount,
-                    placeholder: "Введите общую сумму",
+                    placeholder: Localized.SpendingView.enterTotalAmountPlaceholder,
                     type: .largeAmount
                 )
 //                .modifier(ShakeEffect(delta: numberOfShakes))
@@ -82,8 +82,12 @@ struct SpendingView: View {
                         }
                     }
                 } label: {
-                    Text(viewModel.spending.isNil ? "Добавить трату" : "Сохранить трату")
-                        .foregroundStyle(Color.appColor(.orangeBrand))
+                    Text(
+                        viewModel.spending.isNil
+                        ? Localized.SpendingView.addSpendingButton
+                        : Localized.SpendingView.saveSpendingButton
+                    )
+                    .foregroundStyle(Color.appColor(.orangeBrand))
                 }
                 Spacer()
             }
@@ -103,7 +107,9 @@ struct SpendingView: View {
         .navigationBar(
             model: NavigationBarModel(
                 type: .editSpending(
-                    title: viewModel.spending.isNil ? "Добавление траты" : "Редактирование траты"
+                    title: viewModel.spending.isNil
+                    ? Localized.SpendingView.addSpendingTitle
+                    : Localized.SpendingView.editSpendingTitle
                 ),
                 leadingButtonAction: leadingButtonAction
             )
@@ -127,8 +133,8 @@ private extension SpendingView {
         ToastView(
             showToast: $showSummErrorToast,
             toastData: ToastView.ToastData(
-                title: "Ошибка!",
-                message: "Траты участников не могу превышать общую сумму"
+                title: Localized.Common.errorTitle,
+                message: Localized.SpendingView.contributorExpensesExceedTotal
             )
         )
     }
@@ -137,8 +143,8 @@ private extension SpendingView {
         ToastView(
             showToast: $showNameErrorToast,
             toastData: ToastView.ToastData(
-                title: "Ошибка!",
-                message: "Название траты не должно быть пустым"
+                title: Localized.Common.errorTitle,
+                message: Localized.SpendingView.nameCannotBeEmpty
             )
         )
     }
@@ -147,7 +153,7 @@ private extension SpendingView {
 
     func listView() -> some View {
         VStack {
-            Text("Должники по этой трате")
+            Text(Localized.SpendingView.debtorsSection)
                 .padding(.top, 12)
                 .padding(.horizontal)
                 .foregroundStyle(Color.appColor(.textTertiary))
@@ -157,7 +163,7 @@ private extension SpendingView {
             HStack(alignment: .top) {
                 // Левая колонка
                 columnView(
-                    title: "Участники",
+                    title: Localized.Common.contributors,
                     image: AppImages.arrowRight.image,
                     items: Bindable(viewModel).holders,
                     isSelected: false,
@@ -174,7 +180,7 @@ private extension SpendingView {
                 Divider()
                 // Правая колонка
                 columnView(
-                    title: "Выбранные",
+                    title: Localized.SpendingView.selectedContributorsSection,
                     image: AppImages.checklistChecked.image,
                     items: Bindable(viewModel).selectedHolders,
                     isSelected: true,

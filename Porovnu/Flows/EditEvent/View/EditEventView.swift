@@ -78,22 +78,26 @@ struct EditEventView: View {
             showToast: $showInfoToast,
             content: createInfoToast()
         )
-        .alert("Вы пытаетесь уйти без сохранения!", isPresented: $showBackNavigationAlert) {
-            Button("Сохранить и выйти") {
+        .alert(Localized.EditEventView.unsavedChangesTitle, isPresented: $showBackNavigationAlert) {
+            Button(Localized.EditEventView.saveAndExit) {
                 isDeleteMode = false
                 navigateToEventListWithSave(true)
             }
-            Button("Выйти без сохранения") {
+            Button(Localized.EditEventView.exitWithoutSaving) {
                 isDeleteMode = false
                 navigateToEventListWithSave(false)
             }
-            Button("Остаться", role: .cancel) {}
+            Button(Localized.EditEventView.stay, role: .cancel) {}
         } message: {
-            Text("Без сохранения все изменения будут потеряны")
+            Text(Localized.EditEventView.unsavedChangesMessage)
         }
         .navigationBar(
             model: NavigationBarModel(
-                type: .editEvent(title: selectedPage == .spendings ? "Редактирование" : "Информация"),
+                type: .editEvent(
+                    title: selectedPage == .spendings
+                    ? Localized.EditEventView.editing
+                    : Localized.EditEventView.info
+                ),
                 leadingButtonAction: leadingButtonAction,
                 trailingButtonAction: trailingButtonAction
             )
@@ -112,7 +116,7 @@ private extension EditEventView {
             LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                 HStack {
                     CustomTextField(
-                        placeholder: "Введите название",
+                        placeholder: Localized.EditEventView.enterNamePlaceholder,
                         text: Bindable(viewModel).eventName,
                         type: .largeTitle,
                         isKeyboardShow: $isKeyboardShow
@@ -127,7 +131,7 @@ private extension EditEventView {
                 .padding(.bottom, 10)
 
                 HStack {
-                    Text("Участники")
+                    Text(Localized.Common.contributors)
                         .foregroundStyle(Color.appColor(.textQuaternary))
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -146,7 +150,7 @@ private extension EditEventView {
                             ),
                             isDeleteMode: $isDeleteMode,
                             isKeyboardShow: $isKeyboardShow,
-                            placeholder: "Участник \((index) + 1)",
+                            placeholder: Localized.Common.contributor + "\((index) + 1)",
                             onAction: onAction
                         )
                         .padding(.vertical, 6)
@@ -239,7 +243,7 @@ private extension EditEventView {
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(height: 200)
-                    Text("Пока нет\nни одного участника")
+                    Text(Localized.EditEventView.noContributorsPlaceholder)
                         .multilineTextAlignment(.center)
                         .font(.system(size: 24, weight: .bold))
                         .foregroundStyle(Color.appColor(.textSecondary))
@@ -250,7 +254,7 @@ private extension EditEventView {
                 }
             } else {
                 HStack {
-                    Text("Участники")
+                    Text(Localized.Common.contributors)
                         .foregroundStyle(Color.appColor(.textQuaternary))
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -272,7 +276,7 @@ private extension EditEventView {
                         /// Расходы на всё мероприятие
                         VStack(spacing: 10) {
                             HStack {
-                                Text("Все расходы")
+                                Text(Localized.EditEventView.allExpenses)
                                     .font(.system(size: 16, weight: .regular))
                                     .foregroundStyle(Color.appColor(.textSecondary))
                                     .padding(.leading, 8)
@@ -283,7 +287,7 @@ private extension EditEventView {
                             }
                             .padding(.horizontal)
                             HStack {
-                                Text("Собственные средства")
+                                Text(Localized.EditEventView.ownFunds)
                                     .font(.system(size: 16, weight: .regular))
                                     .foregroundStyle(Color.appColor(.textSecondary))
                                     .padding(.leading, 8)
@@ -294,7 +298,7 @@ private extension EditEventView {
                             }
                             .padding(.horizontal)
                             HStack {
-                                Text("В долг")
+                                Text(Localized.EditEventView.inDebt)
                                     .font(.system(size: 16, weight: .regular))
                                     .foregroundStyle(Color.appColor(.textSecondary))
                                     .padding(.leading, 8)
@@ -314,7 +318,7 @@ private extension EditEventView {
                         /// Заголовок блока "Получит от"
                         if contributorTotalInfo.spendings.isNotEmpty {
                             debtSpending(
-                                title: "Получит от",
+                                title: Localized.EditEventView.willReceiveFrom,
                                 items: contributorTotalInfo.spendings,
                                 count: contributorTotalInfo.spendingsCount
                             )
@@ -322,7 +326,7 @@ private extension EditEventView {
                         /// Заголовок блока "Должен"
                         if contributorTotalInfo.debts.isNotEmpty {
                             debtSpending(
-                                title: "Долг перед",
+                                title: Localized.EditEventView.debtOwed,
                                 items: contributorTotalInfo.debts,
                                 count: contributorTotalInfo.debtsCount
                             )
@@ -475,8 +479,8 @@ private extension EditEventView {
         ToastView(
             showToast: $showTopToast,
             toastData: ToastView.ToastData(
-                title: "Сохранено",
-                message: "Внесенные изменения сохранены",
+                title: Localized.EditEventView.saved,
+                message: Localized.EditEventView.changesSaved,
             )
         )
     }
@@ -485,8 +489,8 @@ private extension EditEventView {
         ToastView(
             showToast: $showInfoToast,
             toastData: ToastView.ToastData(
-                title: "Нельзя удалить участника",
-                message: "В мероприятии должен быть хотя бы один участник"
+                title: Localized.EditEventView.cannotDeleteContributor,
+                message: Localized.EditEventView.atLeastOneContributorRequired
             )
         )
     }

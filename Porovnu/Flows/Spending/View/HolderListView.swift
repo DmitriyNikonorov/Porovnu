@@ -51,7 +51,7 @@ struct HolderListView: View {
                         .background(Color.appColor(.orangeBrand))
                     AmountConvertTextField(
                         amount: $holder.amount,
-                        placeholder: "Сумма",
+                        placeholder: Localized.HolderListView.totalAmount,
                         type: .amount
                     )
                     .layoutPriority(1)

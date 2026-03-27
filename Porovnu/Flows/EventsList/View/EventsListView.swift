@@ -53,7 +53,7 @@ struct EventsListView: View {
         .foregroundStyle(Color.appColor(.backgroundSecondary))
         .navigationBar(
             model: NavigationBarModel(
-                type: .home(title: "Мероприятия"),
+                type: .home(title: Localized.EventsListView.events),
                 trailingButtonAction: trailingButtonAction
             )
         )
@@ -79,8 +79,8 @@ struct EventsListView: View {
         ToastView(
             showToast: $showToast,
             toastData: ToastView.ToastData(
-                title: "Удалено",
-                message: "Мероприятие удалено"
+                title: Localized.EventsListView.deleted,
+                message: Localized.EventsListView.eventDeleted
             )
         )
     }

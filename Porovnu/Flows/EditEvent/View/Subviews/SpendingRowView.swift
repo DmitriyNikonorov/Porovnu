@@ -37,7 +37,7 @@ struct SpendingRowView: View {
             Button(role: .destructive) {
                 onAction(.onDeleteSpending(spending: spending, contributor: contributor))
             } label: {
-                Label("Удалить трату", systemImage: AppImages.trash.sring)
+                Label(Localized.SpendingRowView.deleteSpending, systemImage: AppImages.trash.sring)
             }
         }
     }
