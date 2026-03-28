@@ -229,14 +229,16 @@ final class EditEventViewModel: ViewModel {
         let newContributors = currentContributors.enumerated().map { item in
             Contributor(
                 id: item.element.id,
-                name: item.element.name.isNotEmpty ? item.element.name : "Участник \(item.offset + 1)",
+                name: item.element.name.isNotEmpty
+                ? item.element.name
+                : Localized.Common.contributorAmount(amount: item.offset + 1),
                 spendings: item.element.spendings
             )
         }
 
         let updatedEvent = Event(
             id: eventSnapshot.id,
-            name: currentEventName.isNotEmpty ? currentEventName : "Без названия",
+            name: currentEventName.isNotEmpty ? currentEventName : Localized.EditEventView.untitled,
             contributors: newContributors
         )
 
