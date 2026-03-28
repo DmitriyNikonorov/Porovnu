@@ -8,6 +8,9 @@
 import Foundation
 
 enum Localized {
+
+    // MARK: - Common
+
     enum Common {
         /// Участники / Contributors
         static var contributors: String {
@@ -46,6 +49,8 @@ enum Localized {
         }
     }
 
+    // MARK: - ContributorInfoView
+
     enum ContributorInfoView {
         /// Добавить трату / Add Spending
         static var addSpending: String {
@@ -53,12 +58,16 @@ enum Localized {
         }
     }
 
+    // MARK: - SpendingRowView
+
     enum SpendingRowView {
         /// Удалить трату / Delete Spending
         static var deleteSpending: String {
             NSLocalizedString("deleteSpending", comment: "Delete Spending button")
         }
     }
+
+    // MARK: - EditEventView
 
     enum EditEventView {
         /// Вы пытаетесь уйти без сохранения! / You are trying to leave without saving!
@@ -150,7 +159,19 @@ enum Localized {
         static var atLeastOneContributorRequired: String {
             NSLocalizedString("atLeastOneContributorRequired", comment: "At least one contributor required error")
         }
+
+        /// Без названия / untitled
+        static var untitled: String {
+            NSLocalizedString("untitled", comment: "Title without naming")
+        }
+
+        /// Данные обновятся после сохранения / Data will update after saving
+        static var dataWillUpdateAfterSaving: String {
+            NSLocalizedString("dataWillUpdateAfterSaving", comment: "Changes saved message")
+        }
     }
+
+    // MARK: - EventCardView
 
     enum EventCardView {
         /// участников / contributors
@@ -159,6 +180,8 @@ enum Localized {
             return String.localizedStringWithFormat(format, count)
         }
     }
+
+    // MARK: - EventsListView
 
     enum EventsListView {
         /// Мероприятия / Events
@@ -177,6 +200,8 @@ enum Localized {
         }
     }
 
+    // MARK: - ProfileView
+
     enum ProfileView {
         /// Profile / Profile
         static var profile: String {
@@ -189,12 +214,16 @@ enum Localized {
         }
     }
 
+    // MARK: - HolderListView
+
     enum HolderListView {
         /// Сумма / Total Amount
         static var totalAmount: String {
             NSLocalizedString("totalAmount", comment: "Total amount label")
         }
     }
+
+    // MARK: - SpendingView
 
     enum SpendingView {
         /// Название траты: / Spending name:
