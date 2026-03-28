@@ -236,6 +236,12 @@ private extension EditEventView {
 
     func infoView() -> some View {
         ScrollView {
+            if viewModel.hasAnyChanged {
+                Text(Localized.EditEventView.dataWillUpdateAfterSaving)
+                    .foregroundStyle(Color.appColor(.red))
+                    .padding(.top, 40)
+                    .padding(.horizontal)
+            }
             if viewModel.noContributors {
                 VStack(spacing: 0) {
                     Spacer()
@@ -253,9 +259,7 @@ private extension EditEventView {
                 HStack {
                     Text(Localized.Common.contributors)
                         .foregroundStyle(Color.appColor(.textQuaternary))
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                        .padding(.top, 40)
+                        .padding(.top, viewModel.hasAnyChanged ? 12 : 40)
                         .padding(.bottom, 8)
                         .padding(.horizontal)
                     Spacer()

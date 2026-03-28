@@ -41,13 +41,6 @@ final class EditEventViewModel: ViewModel {
         }
     }
 
-    private var hasAnyChanged: Bool {
-        isEventNameChanged ||
-        isContributorCountChange ||
-        isAnyContributorNameChanged ||
-        isAnySpendingChanged
-    }
-
     private func setChanged() {
         isShowSaveBarButton = hasAnyChanged
     }
@@ -108,6 +101,7 @@ final class EditEventViewModel: ViewModel {
             $0.spendings.isNotEmpty
         }
     }
+
     var isShowSaveBarButtonPreviousState = false
     var isShowSaveBarButton = false {
         didSet {
@@ -115,6 +109,13 @@ final class EditEventViewModel: ViewModel {
         }
     }
     var isNewEvent = false
+
+    var hasAnyChanged: Bool {
+        isEventNameChanged ||
+        isContributorCountChange ||
+        isAnyContributorNameChanged ||
+        isAnySpendingChanged
+    }
 
     // MARK: - Init
 

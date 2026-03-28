@@ -162,7 +162,12 @@ enum Localized {
 
         /// Без названия / untitled
         static var untitled: String {
-            NSLocalizedString("untitled", comment: "Changes saved message")
+            NSLocalizedString("untitled", comment: "Title without naming")
+        }
+
+        /// Данные обновятся после сохранения / Data will update after saving
+        static var dataWillUpdateAfterSaving: String {
+            NSLocalizedString("dataWillUpdateAfterSaving", comment: "Changes saved message")
         }
     }
 
