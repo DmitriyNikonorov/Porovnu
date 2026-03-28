@@ -19,6 +19,12 @@ enum Localized {
             NSLocalizedString("contributor", comment: "Single contributor label")
         }
 
+        /// Участник %@ / Contributor %@
+        static func contributorAmount(amount: Int) -> String {
+            let format = NSLocalizedString("contributor", comment: "Single contributor label with amount")
+            return String.localizedStringWithFormat(format, amount)
+        }
+
         /// Ошибка! / Error!
         static var errorTitle: String {
             NSLocalizedString("errorTitle", comment: "Error alert title")
@@ -212,12 +218,12 @@ enum Localized {
         }
 
         /// Добавить трату / Add Spending
-        static var addSpendingButton: String {
+        static var addSpending: String {
             NSLocalizedString("addSpending", comment: "Add Spending button")
         }
 
         /// Сохранить трату / Save Spending
-        static var saveSpendingButton: String {
+        static var saveSpending: String {
             NSLocalizedString("saveSpendingButton", comment: "Save Spending button")
         }
 
@@ -231,7 +237,7 @@ enum Localized {
             NSLocalizedString("editSpendingTitle", comment: "Edit Spending title")
         }
 
-        /// Траты участников не могу превышать общую сумму / Contributors' expenses cannot exceed the total amount
+        /// Не вся трата распределена между участниками / Not all spending is distributed among participants
         static var contributorExpensesExceedTotal: String {
             NSLocalizedString("contributorExpensesExceedTotal", comment: "Contributors' expenses exceed total error")
         }
@@ -254,6 +260,23 @@ enum Localized {
         /// Нет выбранных / No selected
         static var noSelectedContributors: String {
             NSLocalizedString("noSelectedContributors", comment: "No selected contributors placeholder")
+        }
+
+        /// Распределите общую сумму этой траты между выбранными участниками / Distribute the total amount of this spending among the selected participants
+        static var distributeTotalAmountMessage: String {
+            NSLocalizedString("distributeTotalAmountMessage", comment: "Debtors section subtitle")
+        }
+
+        /// Нераспределенная сумма %@ / Undistributed amount %@
+        static func undistributedAmount(_ summ: String) -> String {
+            let format = NSLocalizedString("undistributedAmount", comment: "Undistributed amount")
+            return String.localizedStringWithFormat(format, summ)
+        }
+
+        /// Превысили общую сумму на %@ / Exceeded total amount by %@
+        static func exceededTotalAmount(_ summ: String) -> String {
+            let format = NSLocalizedString("exceededTotalAmount", comment: "Exceeded total amount")
+            return String.localizedStringWithFormat(format, summ)
         }
     }
 }

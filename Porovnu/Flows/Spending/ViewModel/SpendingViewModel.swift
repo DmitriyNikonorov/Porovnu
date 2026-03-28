@@ -27,8 +27,16 @@ final class SpendingViewModel: ViewModel {
     var spendingName: String
     var spendingTotalAmount: Double
     var spendingDiscription: String
-
     var showAmountError = false
+
+    var notDistributedSumm: Double {
+        spendingTotalAmount - (selectedHolders.reduce(0) { $0 + $1.amount })
+    }
+
+    var showNotDistributedSumm: Bool {
+        !notDistributedSumm.isZero && !spendingTotalAmount.isZero
+    }
+
 
     init(
         dto: EditSpendingDto,
@@ -39,7 +47,9 @@ final class SpendingViewModel: ViewModel {
         let newContributors = dto.contributors.enumerated().map { item in
             Contributor(
                 id: item.element.id,
-                name: item.element.name.isEmpty ? "Участник \(item.offset + 1)" : item.element.name,
+                name: item.element.name.isEmpty
+                ? Localized.Common.contributorAmount(amount: item.offset + 1)
+                : item.element.name,
                 spendings: item.element.spendings
             )
         }
@@ -61,10 +71,17 @@ final class SpendingViewModel: ViewModel {
     func unselectHolder(holder: Holder) {
         if let index = selectedHolders.firstIndex(where: { $0.id == holder.id }) {
             let holder = selectedHolders.remove(at: index)
-            holders.append(holder)
+            let resetHolder = Holder(
+                id: holder.id,
+                spendingId: holder.spendingId,
+                contributorId: holder.contributorId,
+                contributorName: holder.contributorName,
+                amount: .zero,
+                isPayer: holder.isPayer
+            )
+            holders.append(resetHolder)
         }
     }
-    
 
     func selectHolder(holder: Holder) {
         if let index = holders.firstIndex(where: { $0.id == holder.id }) {
@@ -132,19 +149,33 @@ final class SpendingViewModel: ViewModel {
             return .noSpendingName
         }
 
-        guard spendingTotalAmount >= (selectedHolders.reduce(0) { $0 + $1.amount }) else {
+        guard !spendingTotalAmount.isZero else {
+            return .noSumm
+        }
+
+        guard !(selectedHolders.isEmpty && spendingTotalAmount.isZero == false) else {
+            createAndSaveSpending()
+            return .success
+        }
+
+        guard spendingTotalAmount == (selectedHolders.reduce(0) { $0 + $1.amount }) else {
             return .notCorrentSumm
         }
 
+        createAndSaveSpending()
+        return .success
+    }
+
+    func createAndSaveSpending() {
+        let involvedHolders = selectedHolders.filter { !$0.amount.isZero }
         let spending = Spending(
             id: spendingId,
             contributorId: creditor.id,
             name: spendingName,
             totalAmount: spendingTotalAmount,
-            holders: selectedHolders
+            holders: involvedHolders
         )
 
         onSave?(spending)
-        return .success
     }
 }

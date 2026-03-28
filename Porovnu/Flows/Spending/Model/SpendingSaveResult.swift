@@ -9,4 +9,5 @@ enum SpendingSaveResult {
     case success
     case noSpendingName
     case notCorrentSumm
+    case noSumm
 }

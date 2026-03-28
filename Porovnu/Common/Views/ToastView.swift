@@ -20,7 +20,7 @@ struct ToastView: View {
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "checkmark")
+                AppImages.checkmark.image
                 VStack(alignment: .leading, spacing: 2) {
                     Text(LocalizedStringKey(toastData.title))
                         .font(.subheadline)
