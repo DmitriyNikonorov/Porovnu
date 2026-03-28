@@ -50,15 +50,6 @@ struct SpendingView: View {
                     placeholder: Localized.SpendingView.enterTotalAmountPlaceholder,
                     type: .largeAmount
                 )
-//                .modifier(ShakeEffect(delta: numberOfShakes))
-//                Text("Описание")
-//                    .padding(.top, 12)
-//                    .foregroundStyle(Color.appColor(.textQuaternary))
-//                CustomTextField(
-//                    placeholder: "Введите описание",
-//                    position: .single,
-//                    text: Bindable(viewModel).spendingDiscription
-//                )
             }
             .padding(.horizontal)
             .padding(.bottom, 16)
@@ -161,7 +152,7 @@ private extension SpendingView {
             Divider()
 
             HStack(alignment: .top) {
-                // Левая колонка
+                /// Левая колонка
                 columnView(
                     title: Localized.Common.contributors,
                     image: AppImages.arrowRight.image,
@@ -178,7 +169,7 @@ private extension SpendingView {
                 )
 
                 Divider()
-                // Правая колонка
+                /// Правая колонка
                 columnView(
                     title: Localized.SpendingView.selectedContributorsSection,
                     image: AppImages.checklistChecked.image,
@@ -274,28 +265,3 @@ private extension SpendingView {
         .frame(maxWidth: .infinity, minHeight: 100)
     }
 }
-
-//struct ShakeEffect: AnimatableModifier {
-//    var delta: CGFloat = 0
-//    var animatableData: CGFloat {
-//        get {
-//            delta
-//        } set {
-//            delta = newValue
-//        }
-//    }
-//
-//    func body(content: Content) -> some View {
-//        content
-//            .rotationEffect(Angle(degrees: sin(delta * .pi * 4.0) * CGFloat.random(in: 2...4)))
-//            .offset(x: sin(delta * 1.5 * .pi * 1.2),
-//                    y: cos(delta * 1.5 * .pi * 1.1))
-//    }
-//}
-
-
-//extension View {
-//    func shake(isActive: Bool) -> some View {
-//        modifier(ShakeEffect(isShaking: isActive))
-//    }
-//}
