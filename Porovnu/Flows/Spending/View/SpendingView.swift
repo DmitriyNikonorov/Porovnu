@@ -15,6 +15,7 @@ struct SpendingView: View {
     @FocusState private var isFocused: Bool
     @State private var showSummErrorToast = false
     @State private var showNameErrorToast = false
+    @State private var showNoSummErrorToast = false
 
     private var viewModel: SpendingViewModel
 
@@ -50,6 +51,16 @@ struct SpendingView: View {
                     placeholder: Localized.SpendingView.enterTotalAmountPlaceholder,
                     type: .largeAmount
                 )
+// TODO: SU-22 Раскоментить когда будет добавлено описание траты
+//                .modifier(ShakeEffect(delta: numberOfShakes))
+//                Text("Описание")
+//                    .padding(.top, 12)
+//                    .foregroundStyle(Color.appColor(.textQuaternary))
+//                CustomTextField(
+//                    placeholder: "Введите описание",
+//                    position: .single,
+//                    text: Bindable(viewModel).spendingDiscription
+//                )
             }
             .padding(.horizontal)
             .padding(.bottom, 16)
@@ -70,13 +81,16 @@ struct SpendingView: View {
 
                         case .notCorrentSumm:
                             showSummErrorToast = true
+
+                        case .noSumm:
+                            showNoSummErrorToast = true
                         }
                     }
                 } label: {
                     Text(
                         viewModel.spending.isNil
-                        ? Localized.SpendingView.addSpendingButton
-                        : Localized.SpendingView.saveSpendingButton
+                        ? Localized.SpendingView.addSpending
+                        : Localized.SpendingView.saveSpending
                     )
                     .foregroundStyle(Color.appColor(.orangeBrand))
                 }
@@ -89,11 +103,15 @@ struct SpendingView: View {
         }
         .showToast(
             showToast: $showSummErrorToast,
-            content: createErrorSummToast()
+            content: createErrorToast(for: .notCorrentSumm)
         )
         .showToast(
             showToast: $showNameErrorToast,
-            content: createErrorNameToast()
+            content: createErrorToast(for: .noSpendingName)
+        )
+        .showToast(
+            showToast: $showNoSummErrorToast,
+            content: createErrorToast(for: .noSumm)
         )
         .navigationBar(
             model: NavigationBarModel(
@@ -120,34 +138,70 @@ private extension SpendingView {
         )
     }
 
-    func createErrorSummToast() -> some View {
-        ToastView(
-            showToast: $showSummErrorToast,
-            toastData: ToastView.ToastData(
-                title: Localized.Common.errorTitle,
-                message: Localized.SpendingView.contributorExpensesExceedTotal
+    @ViewBuilder
+    func createErrorToast(for result: SpendingSaveResult) -> some View {
+        switch result {
+        case .noSpendingName:
+            ToastView(
+                showToast: $showNameErrorToast,
+                toastData: ToastView.ToastData(
+                    title: Localized.Common.errorTitle,
+                    message: Localized.SpendingView.nameCannotBeEmpty
+                )
             )
-        )
+
+        case .notCorrentSumm:
+            ToastView(
+                showToast: $showSummErrorToast,
+                toastData: ToastView.ToastData(
+                    title: Localized.Common.errorTitle,
+                    message: Localized.SpendingView.contributorExpensesExceedTotal
+                )
+            )
+        case .noSumm:
+            ToastView(
+                showToast: $showNoSummErrorToast,
+                toastData: ToastView.ToastData(
+                    title: Localized.Common.errorTitle,
+                    message: "Общая сумма траты не может быть пуста"
+                )
+            )
+
+        case .success:
+            EmptyView()
+        }
     }
 
-    func createErrorNameToast() -> some View {
-        ToastView(
-            showToast: $showNameErrorToast,
-            toastData: ToastView.ToastData(
-                title: Localized.Common.errorTitle,
-                message: Localized.SpendingView.nameCannotBeEmpty
-            )
-        )
-    }
+//    func createErrorNameToast() -> some View {
+//
+//    }
+
+//    func createNoSummToast() -> some View {
+//        ToastView(
+//            showToast: $showNoSummErrorToast,
+//            toastData: ToastView.ToastData(
+//                title: Localized.Common.errorTitle,
+//                message: "Общая сумма траты не может быть пуста"
+//            )
+//        )
+//    }
 
     // MARK: - List View
 
     func listView() -> some View {
         VStack {
             Text(Localized.SpendingView.debtorsSection)
+                .font(.system(size: 16))
                 .padding(.top, 12)
+                .padding(.bottom, 4)
                 .padding(.horizontal)
                 .foregroundStyle(Color.appColor(.textTertiary))
+                .multilineTextAlignment(.center)
+            Text(Localized.SpendingView.distributeTotalAmountMessage)
+                .font(.system(size: 14))
+                .padding(.horizontal)
+                .foregroundStyle(Color.appColor(.textTertiary))
+                .multilineTextAlignment(.center)
 
             Divider()
 
@@ -216,6 +270,18 @@ private extension SpendingView {
             if items.wrappedValue.isEmpty {
                 emptyStateView
             } else {
+                if isSelected && viewModel.showNotDistributedSumm {
+                    Text(viewModel.notDistributedSumm > 0
+                         ? Localized.SpendingView.undistributedAmount("\(viewModel.notDistributedSumm)")
+                         : Localized.SpendingView.exceededTotalAmount("\(abs(viewModel.notDistributedSumm))")
+                    )
+                    .font(.system(size: 12))
+                    .lineLimit(2)
+                    .foregroundStyle(Color.appColor(.lightOrangeBrand))
+                    .contentTransition(.numericText())
+                    .animation(.easeInOut(duration: 0.3), value: viewModel.notDistributedSumm)
+                }
+                
                 LazyVStack(spacing: 8) {
                     ForEach(items.wrappedValue.indices, id: \.self) { index in
                         HolderListView(
@@ -227,6 +293,7 @@ private extension SpendingView {
                 }
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: isSelected && viewModel.showNotDistributedSumm)
     }
 
     func bindingForHolder(at index: Int, in items: Binding<[Holder]>) -> Binding<Holder> {
