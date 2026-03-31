@@ -16,22 +16,22 @@ struct ContributorTotalInfo: Hashable, Identifiable {
     /// Имя участника
     let name: String
     /// На какую суму поучаствовал в мероприятии (все Spending)
-    var totalSpendings: Double {
+    var totalSpendings: Int {
         totalSpendingOnOtherContributors + selfSpendings
     }
     /// Какую сумму потратил на других(сколько дал в долг, сумма всех Holder.amount, где Holder.contributorId != id)
-    let totalSpendingOnOtherContributors: Double
+    let totalSpendingOnOtherContributors: Int
     /// Какую сумму потратил на себя(сумма всех Holder.amount, где Holder.contributorId == id)
-    let selfSpendings: Double
+    let selfSpendings: Int
     /// Какую сумму взял в долг за мероприятие(сума всех Holder.amount, где Holder.contributorId == id у других  Contributor)
-    let totalDebt: Double
+    let totalDebt: Int
     /// Какую сумму должен с учетом взаиморасчетов
-    let selfDebt: Double
+    let selfDebt: Int
 
     /// Массив долгов (Имя кому должен, сумма долга)
     let debts: [InfoItem]
 
-    var debtsCount: Double {
+    var debtsCount: Int {
         abs(debts.reduce(0) { $0 + $1.amount })
     }
 
@@ -39,12 +39,12 @@ struct ContributorTotalInfo: Hashable, Identifiable {
     /// Массив трат (Имя кто должен, сумма долга)
     let spendings: [InfoItem]
 
-    var spendingsCount: Double {
+    var spendingsCount: Int {
         spendings.reduce(0) { $0 + $1.amount }
     }
 
     /// Сколько потратил на мероприятие сам + взял в долг
-    var totalSelfSpendings: Double {
+    var totalSelfSpendings: Int {
         selfSpendings + abs(totalDebt)
     }
 }
@@ -54,16 +54,16 @@ struct InfoItem: Hashable, Identifiable {
 
     let contributorId: UUID
     let contributorName: String
-    let amount: Double
+    let amount: Int
 
-    init(id: UUID = UUID(), contributorId: UUID, contributorName: String, amount: Double = .zero) {
+    init(id: UUID = UUID(), contributorId: UUID, contributorName: String, amount: Int = 0) {
         self.id = id
         self.contributorId = contributorId
         self.contributorName = contributorName
         self.amount = amount
     }
 
-    init(item: InfoItem, amount: Double) {
+    init(item: InfoItem, amount: Int) {
         self.init(id: item.id, contributorId: item.contributorId, contributorName: item.contributorName, amount: amount)
     }
 }

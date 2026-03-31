@@ -10,12 +10,20 @@ import SwiftData
 
 @Observable
 final class EventsListViewModel: ViewModel {
+
+    // MARK: - Private properties
+
     private var dataBaseManager: DataBaseManagerProtocol
     private var lastFetchTime: Date = .distantPast
     private var isFirstLaunch = true
+
+    // MARK: - Public properties
+
     var onSelect: (UUID) -> Void
     var onCreateNew: () -> Void
     var events = [EventShort]()
+
+    // MARK: - Init
 
     init(dto: EventListDto, dataBaseManager: DataBaseManagerProtocol) {
         self.onSelect = dto.onSelect
@@ -23,6 +31,8 @@ final class EventsListViewModel: ViewModel {
         self.dataBaseManager = dataBaseManager
         super.init()
     }
+
+    // MARK: - Public properties
 
     func fetchModels() {
         if isFirstLaunch {
@@ -47,5 +57,3 @@ final class EventsListViewModel: ViewModel {
         dataBaseManager.deleteById(EventModel.self, id: id)
     }
 }
-
-

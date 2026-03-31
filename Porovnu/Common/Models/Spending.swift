@@ -15,11 +15,11 @@ struct Spending: Hashable, Identifiable {
     /// Название траты
     let name: String
     /// Cумма траты
-    let totalAmount: Double
+    let totalAmount: Int
     /// Должники по трате
     let holders: [Holder]
 
-    init(id: UUID = UUID(), contributorId: UUID, name: String, totalAmount: Double, holders: [Holder]) {
+    init(id: UUID = UUID(), contributorId: UUID, name: String, totalAmount: Int, holders: [Holder]) {
         self.id = id
         self.contributorId = contributorId
         self.name = name

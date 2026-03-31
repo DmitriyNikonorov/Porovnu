@@ -337,10 +337,10 @@ private extension EditEventViewModel {
         var contributorsNamesDict = [UUID: String]()
 
         /// Словарь трат - [id должника: общая сумма трат]
-        var spendingDict = [UUID: Double]()
-        var totalSpendings: Double = .zero
-        var totalDebts: Double = .zero
-        var selfSpendings: Double = .zero
+        var spendingDict = [UUID: Int]()
+        var totalSpendings: Int = 0
+        var totalDebts: Int = 0
+        var selfSpendings: Int = 0
 
         for spending in creditSpendings {
             if spending.holders.isEmpty {
@@ -374,7 +374,7 @@ private extension EditEventViewModel {
 
                 spendingDict[
                     creditorId,
-                    default: 0.0
+                    default: 0
                 ] -= holder.amount
                 totalDebts -= holder.amount
                 contributorsNamesDict[holder.contributorId] = holder.contributorName
@@ -394,7 +394,7 @@ private extension EditEventViewModel {
                 )
             )
         }
-        let selfDebt = infoList.reduce(into: Double()) { result, element in
+        let selfDebt = infoList.reduce(into: Int()) { result, element in
             result += element.amount
         }
 
