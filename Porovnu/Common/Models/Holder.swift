@@ -16,12 +16,12 @@ struct Holder: Hashable, Identifiable {
     let contributorId: UUID
     /// Имя на кого потратили
      let contributorName: String
-    /// Размер долго в этой части траты
-    var amount: Double
+    /// Размер долга в этой части траты
+    var amount: Int
     /// Является ли плательщиком
     let isPayer: Bool
 
-    init(id: UUID = UUID(), spendingId: UUID, contributorId: UUID, contributorName: String, amount: Double, isPayer: Bool) {
+    init(id: UUID = UUID(), spendingId: UUID, contributorId: UUID, contributorName: String, amount: Int, isPayer: Bool) {
         self.id = id
         self.spendingId = spendingId
         self.contributorId = contributorId
@@ -30,7 +30,7 @@ struct Holder: Hashable, Identifiable {
         self.isPayer = isPayer
     }
 
-    init(holder: Holder, amount: Double) {
+    init(holder: Holder, amount: Int) {
         self.init(
             id: holder.id,
             spendingId: holder.spendingId,

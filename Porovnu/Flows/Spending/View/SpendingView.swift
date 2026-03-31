@@ -172,20 +172,6 @@ private extension SpendingView {
         }
     }
 
-//    func createErrorNameToast() -> some View {
-//
-//    }
-
-//    func createNoSummToast() -> some View {
-//        ToastView(
-//            showToast: $showNoSummErrorToast,
-//            toastData: ToastView.ToastData(
-//                title: Localized.Common.errorTitle,
-//                message: "Общая сумма траты не может быть пуста"
-//            )
-//        )
-//    }
-
     // MARK: - List View
 
     func listView() -> some View {
@@ -272,8 +258,8 @@ private extension SpendingView {
             } else {
                 if isSelected && viewModel.showNotDistributedSumm {
                     Text(viewModel.notDistributedSumm > 0
-                         ? Localized.SpendingView.undistributedAmount("\(viewModel.notDistributedSumm)")
-                         : Localized.SpendingView.exceededTotalAmount("\(abs(viewModel.notDistributedSumm))")
+                         ? Localized.SpendingView.undistributedAmount("\(Double(viewModel.notDistributedSumm) / 100)")
+                         : Localized.SpendingView.exceededTotalAmount("\(abs(Double(viewModel.notDistributedSumm) / 100))")
                     )
                     .font(.system(size: 12))
                     .lineLimit(2)

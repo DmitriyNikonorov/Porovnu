@@ -338,7 +338,7 @@ private extension EditEventView {
         }
     }
 
-    func debtSpending(title: String, items: [InfoItem], count: Double) -> some View {
+    func debtSpending(title: String, items: [InfoItem], count: Int) -> some View {
         VStack {
             HStack {
                 Text(title)
