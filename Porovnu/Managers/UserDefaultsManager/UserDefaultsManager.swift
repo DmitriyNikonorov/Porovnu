@@ -39,7 +39,7 @@ struct UserDefaultsManager {
             let data = try JSONEncoder().encode(value)
             UserDefaults.standard.set(data, forKey: key)
         } catch {
-            print("UserDefaults save error: \(error)")
+            debugPrint("UserDefaults save error: \(error)")
         }
     }
 

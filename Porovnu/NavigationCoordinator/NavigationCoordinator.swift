@@ -215,9 +215,8 @@ private extension NavigationCoordinator {
         let routeDescription = route.map { "to \($0)" } ?? ""
         let actionDescription = action.map { "\($0)" } ?? ""
         let tabDiscription = selectedTab.rawValue
-        print("Current tab: \(tabDiscription)\nNavigationCoordinator: \(actionDescription) \(routeDescription)")
-        print("Path count: \(homePath.count)")
-        print("")
+        debugPrint("Current tab: \(tabDiscription)\nNavigationCoordinator: \(actionDescription) \(routeDescription)")
+        debugPrint("Path count: \(homePath.count)")
         #endif
     }
 }

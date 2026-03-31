@@ -13,32 +13,15 @@ import SwiftData
 protocol DataBaseManagerProtocol {
 
     var lastContextChange: Date { get }
-//    func insertInContext<T: PersistentModel>(_ model: T)
-//    func saveContextIfNeeded()
-
-//    func save<T: PersistentModel>(_ model: T)
     func deleteById<T: PersistentModel>(_ type: T.Type, id: UUID) where T: IdentifiableModel
 
     func fetchEvents() -> [Event]
     func fetchEventsShort() -> [EventShort]
-//    func fetchContributors() -> [Contributor]
-//    func fetchSpending() -> [Spending]
-//    func fetchHolder() -> [HolderModel]
 
     func fetchEvent(by: UUID) -> Event?
-//    func fetchContributor(by: UUID) -> Contributor?
-//    func fetchSpending(by: UUID) -> Spending?
-//    func fetchHolder(by: UUID) -> Holder?
-
-
-
-
     func saveEvent(event: Event)
     func updateEvent(event: Event)
     func updateEventProperties(event: Event)
-
-//    func updateContribotorProperties(contributor: Contributor)
-//    func updateContributor(contributor: Contributor, withSpendings: Bool)
 }
 
 @MainActor
@@ -70,7 +53,7 @@ final class DataBaseManager: DataBaseManagerProtocol {
         } catch {
             debugPrint("Failed to create model container: \(error)")
         }
-        print("DataManager initialize")
+        debugPrint("DataManager initialize")
     }
 
     // MARK: - Delete <T>
@@ -80,7 +63,7 @@ final class DataBaseManager: DataBaseManagerProtocol {
             modelContext?.deleteModelById(type, id: id)
             try saveContext()
         } catch {
-            print("error \(error)")
+            debugPrint("error \(error)")
         }
     }
 
@@ -139,7 +122,7 @@ final class DataBaseManager: DataBaseManagerProtocol {
             try saveContext()
 
         } catch {
-            print("error \(error)")
+            debugPrint("error \(error)")
         }
     }
 
@@ -199,101 +182,11 @@ final class DataBaseManager: DataBaseManagerProtocol {
             }
 
             try saveContext()
-            print("🤖 try to update Spendings")
+            debugPrint("🤖 try to update Spendings")
         } catch {
-            print("error \(error)")
+            debugPrint("error \(error)")
         }
     }
-
-
-
-//    func insertInContext<T: PersistentModel>(_ model: T) {
-//        modelContext?.insert(model)
-//    }
-//
-//    func saveContextIfNeeded() {
-//        do {
-//            try saveContext()
-//        } catch {
-//            debugPrint("Save context error: \(error)")
-//        }
-//    }
-
-//    func save<T: PersistentModel>(_ model: T) {
-//        modelContext?.saveModel(model)
-//        lastContextChange = Date()
-//    }
-//
-//    func fetchContributors() -> [Contributor] {
-//        guard let modelContext else {
-//            return []
-//        }
-//
-//        return modelContext
-//            .fetchModels(ContributorModel.self)
-//            .map {
-//                Contributor(dataBaseModel: $0)
-//            }
-//    }
-//
-//    func fetchSpending() -> [Spending] {
-//        guard let modelContext else {
-//            return []
-//        }
-//
-//        return modelContext
-//            .fetchModels(SpendingModel.self)
-//            .map {
-//                Spending(dataBaseModel: $0)
-//            }
-//    }
-//
-//    func fetchHolder() -> [HolderModel] {
-//        guard let modelContext else {
-//            return []
-//        }
-//
-//        return modelContext.fetchModels(HolderModel.self)
-//    }
-//
-//
-//
-//    func fetchContributor(by id: UUID) -> Contributor? {
-//        guard let modelContext else {
-//            return nil
-//        }
-//
-//        return modelContext.fetchModelById(ContributorModel.self, id: id).map { Contributor(dataBaseModel: $0) }
-//    }
-//
-//    func fetchSpending(by id: UUID) -> Spending? {
-//        guard let modelContext else {
-//            return nil
-//        }
-//
-//        return modelContext.fetchModelById(SpendingModel.self, id: id).map { Spending(dataBaseModel: $0) }
-//    }
-//
-//    func fetchHolder(by id: UUID) -> Holder? {
-//        guard let modelContext else {
-//            return nil
-//        }
-//
-//        return modelContext.fetchModelById(HolderModel.self, id: id).map {
-//            Holder(
-//                id: $0.id,
-//                spendingId: $0.spendingId,
-//                contributorId: $0.contributorId,
-//                contributorName: $0.contributorName,
-//                amount: $0.amount,
-//                isPayer: $0.isPayer
-//            )
-//        }
-//    }
-
-
-
-
 
     func updateEventProperties(event: Event) {
         let eventId = event.id
@@ -310,7 +203,7 @@ final class DataBaseManager: DataBaseManagerProtocol {
             eventModel.name = event.name
             try saveContext()
         } catch {
-            print("error \(error)")
+            debugPrint("error \(error)")
         }
     }
 }
@@ -441,75 +334,4 @@ private extension DataBaseManager {
             }
         }
     }
-
 }
-
-//    func updateContribotorProperties(contributor: Contributor) {
-//        let contributorId = contributor.id
-//        do {
-//            guard
-//                let modelContext,
-//                let contributorModel = try modelContext.fetch(
-//                    FetchDescriptor<ContributorModel>(predicate: #Predicate { $0.id == contributorId })
-//                ).first
-//            else {
-//                return
-//            }
-//
-//            contributorModel.name = contributor.name
-//            try saveContext()
-//        } catch {
-//            print("error \(error)")
-//        }
-//    }
-
-    //
-    //    func updateSpendingWithHolders(spending: Spending, contribution: Contributor) {
-    //        let spendingId = spending.id
-    //        do {
-    //            guard
-    //                let modelContext,
-    //                let spendingModel = try modelContext.fetch(
-    //                    FetchDescriptor<SpendingModel>(predicate: #Predicate { $0.id == spendingId })
-    //                ).first
-    //            else {
-    //                throw NSError(domain: "DataBaseManager", code: 0, userInfo: ["Fetch Error": spending])
-    //            }
-    //
-    //            for holder in spendingModel.holders {
-    //                modelContext.delete(holder)
-    //            }
-    //
-    //            for holder in spending.holders {
-    //                let newHolder = Holder(id: holder.id, spendingId: holder.spendingId, contributorId: holder.contributorId, contributorName: holder.contributorName, amount: holder.amount, isPayer: holder.isPayer)
-    //                let holderModel = HolderModel(holder: newHolder, spending: spending, contribotor: contribution)
-    //                modelContext.insert(holderModel)
-    //            }
-    //
-    //            spendingModel.name = spending.name
-    //            spendingModel.totalAmount = spending.totalAmount
-    //            try saveContext()
-    //            print("🤖")
-    //        } catch {
-    //            print("error \(error)")
-    //        }
-    //    }
-
-
-        //    func findContributorModel(for contributorId: UUID) throws -> ContributorModel {
-        //        guard let modelContext else {
-        //            throw DataError.noContext
-        //        }
-        //
-        //        guard
-        //            let contributorModel = try modelContext.fetch(
-        //                FetchDescriptor<ContributorModel>(predicate: #Predicate<ContributorModel> { model in
-        //                    contributorId == model.id
-        //                })
-        //            ).first
-        //        else {
-        //            throw DataError.contributorNotFound(contributorId)
-        //        }
-        //
-        //        return contributorModel
-        //    }
