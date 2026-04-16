@@ -77,7 +77,7 @@ protocol Coordinatable {
     func navigateToRoot()
 }
 
-enum TabItem: Int, Hashable {
+enum TabItem: Int, Hashable, CaseIterable {
     case home, profile
 
     var image: Image {

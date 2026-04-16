@@ -17,10 +17,6 @@ fileprivate struct ContributorInfoViewHeightPreferenceKey: PreferenceKey {
 
 struct ContributorInfoView: View {
 
-    // MARK: - Private propertie
-
-    @State private var textFieldHeight: CGFloat = 44
-
     // MARK: - Public properties
 
     @FocusState.Binding var isFocused: Bool

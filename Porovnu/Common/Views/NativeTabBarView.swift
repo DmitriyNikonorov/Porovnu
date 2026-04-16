@@ -53,16 +53,6 @@ struct NativeTabBarView: View {
             NavigationStack(path: Bindable(navigationCoordinator).profilePath) {
                 ProfileView()
                     .environment(navigationCoordinator)
-//                    .navigationDestination(for: AppRoute.self) { route in
-//                        switch route {
-//                        case .createEvent:
-//                            assembler.resolveCreateEventView()
-//
-//
-//                        case .eventDetails(let event):
-//                            EventView(event: event)
-//                        }
-//                    }
             }
             .tabItem {
                 tabItemView(for: .profile)

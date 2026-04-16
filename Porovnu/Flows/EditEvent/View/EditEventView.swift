@@ -34,34 +34,32 @@ struct EditEventView: View {
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading) {
-            PageView(
-                selectedType: $selectedPage,
-                spendingsContent: {
-                    ZStack {
-                        scrollView()
-                        if !isDeleteMode {
-                            addContributorButtonFixed()
-                        }
+        PageView(
+            selectedType: $selectedPage,
+            spendingsContent: {
+                ZStack {
+                    scrollView()
+                    if !isDeleteMode {
+                        addContributorButtonFixed()
                     }
-                },
-                debtsContent: {
-                    infoView()
                 }
-            )
-            .ignoresSafeArea(.keyboard)
-            .onChange(of: selectedPage) { _, newValue in
-                switch newValue {
-                case .spendings:
-                    viewModel.isShowSaveBarButton = viewModel.isShowSaveBarButtonPreviousState
-
-                case .debts:
-                    isDeleteMode = false
-                    viewModel.isShowSaveBarButton = false
-                }
-
-                isShowEditBarButton = newValue == .spendings
+            },
+            debtsContent: {
+                infoView()
             }
+        )
+        .ignoresSafeArea(.keyboard)
+        .onChange(of: selectedPage) { _, newValue in
+            switch newValue {
+            case .spendings:
+                viewModel.isShowSaveBarButton = viewModel.isShowSaveBarButtonPreviousState
+
+            case .debts:
+                isDeleteMode = false
+                viewModel.isShowSaveBarButton = false
+            }
+
+            isShowEditBarButton = newValue == .spendings
         }
         .background(Color.appColor(.backgroundSecondary))
         .onAppear {
@@ -110,7 +108,7 @@ private extension EditEventView {
 
     func scrollView() -> some View {
         ScrollView {
-            LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+            LazyVStack(spacing: 0) {
                 HStack {
                     CustomTextField(
                         placeholder: Localized.EditEventView.enterNamePlaceholder,
@@ -170,11 +168,10 @@ private extension EditEventView {
             }
             .padding(.horizontal)
             .foregroundStyle(Color.appColor(.backgroundSecondary))
-
             /// Button
+            /// Высота отступа благодаря кнопке 36 + 16 = 52
             addContributorButtonScrollable()
                 .opacity(isDeleteMode ? 0 : 1)
-
         }
         .onChange(of: isKeyboardShow) { _, isKeyboardVisible in
             keyboardHeight = isKeyboardVisible ? 335 : 0
@@ -199,9 +196,9 @@ private extension EditEventView {
                 Spacer()
             }
         }
-        .scrollTargetLayout()
+        .scrollTargetLayout() // ??
         .padding(.top, 16)
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(PlainButtonStyle()) // ??
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)
         .visibilityTracker(
@@ -225,7 +222,7 @@ private extension EditEventView {
             }
             .buttonStyle(PlainButtonStyle())
             .frame(width: 48, height: 48)
-            .padding(.bottom, 60)
+            .padding(.bottom, 60) // FIXME: - Вынести в глобальные константы
             .opacity(isAddButtonInListVisible ? 0 : 1)
             .disabled(isAddButtonInListVisible)
         }
@@ -336,6 +333,7 @@ private extension EditEventView {
                 }
             }
         }
+        .contentMargins(.bottom, 52, for: .scrollContent)
     }
 
     func debtSpending(title: String, items: [InfoItem], count: Int) -> some View {
@@ -375,7 +373,6 @@ private extension EditEventView {
             )
         }
     }
-
 }
 
 // MARK: - Private Methods
