@@ -32,7 +32,7 @@ struct VisibilityTrackerModifier: ViewModifier {
 
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             let screenHeight = windowScene.screen.bounds.height
-            let isCurrentlyVisible = frame.maxY > 140 && frame.minY < screenHeight - 150
+            let isCurrentlyVisible = frame.minY < screenHeight - 150
             isVisible = isCurrentlyVisible
         }
     }
