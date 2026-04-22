@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomTabBarView: View {
-    
+
     @Environment(NavigationCoordinator.self) private var navigationCoordinator
     let tabs: [TabItem] = [.home, .profile]
     let assembler: DefaultAssembler
@@ -19,7 +19,7 @@ struct CustomTabBarView: View {
         homeViewModel = assembler.resolveEditEventViewModel(assembler: assembler)
         UITabBar.appearance().isHidden = true
     }
-    
+
     var body: some View {
         ZStack {
             TabView(selection: Bindable(navigationCoordinator).selectedTab) {
@@ -61,7 +61,6 @@ struct CustomTabBarView: View {
                 .environment(navigationCoordinator)
         }
         .onAppear {
-            // Находим UIScrollView внутри TabView и отключаем авто-настройку отступов
             UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         }
     }
@@ -91,26 +90,43 @@ struct CustomTabView: View {
                 }
             }
             .padding(.vertical, 6.0)
-            .background(
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.appColor(.backgroundTertiary).opacity(0.9),
-                                Color.appColor(.backgroundSecondary).opacity(0.95)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
+            .background {
+                if #available(iOS 26.0, *) {
+                    RoundedRectangle(cornerRadius: 25)
+                        .glassEffect(.regular)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.appColor(.backgroundTertiary).opacity(0.9),
+                                            Color.appColor(.backgroundSecondary).opacity(0.95)
+                                        ],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .blendMode(.difference)
                         )
-                    )
-                    .blur(radius: 2)
-
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.appColor(.grayBrand).opacity(0.3), lineWidth: 0.5)
-            )
-            .shadow(color: Color.appColor(.background).opacity(0.1), radius: 10, y: 2)
+                } else {
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.appColor(.backgroundTertiary).opacity(0.9),
+                                    Color.appColor(.backgroundSecondary).opacity(0.95)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .blur(radius: 2)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .stroke(Color.appColor(.grayBrand).opacity(0.3), lineWidth: 0.5)
+                        )
+                }
+            }
             .padding(.horizontal)
             .padding(.bottom, 20)
         }
