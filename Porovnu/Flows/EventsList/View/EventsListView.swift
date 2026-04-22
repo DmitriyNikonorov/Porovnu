@@ -18,7 +18,7 @@ struct EventsListView: View {
     @State var viewModel: EventsListViewModel
 
     var body: some View {
-        List {
+        ScrollView {
             ForEach(viewModel.events) { event in
                 EventCardView(event: event)
                     .listRowInsets(EdgeInsets())
@@ -46,23 +46,24 @@ struct EventsListView: View {
 
                     }
             }
+            .padding(.top, 16)
         }
-        .contentMargins(.top, 24, for: .scrollContent)
+        .contentMargins(.bottom, 52, for: .scrollContent) // FIXME: - вынести в глобальные константы
         .background(Color.appColor(.backgroundSecondary))
         .listStyle(.plain)
         .foregroundStyle(Color.appColor(.backgroundSecondary))
-        .navigationBar(
-            model: NavigationBarModel(
-                type: .home(title: Localized.EventsListView.events),
-                trailingButtonAction: trailingButtonAction
-            )
-        )
         .onAppear {
             viewModel.fetchModels()
         }
         .showToast(
             showToast: $showToast,
             content: createToast()
+        )
+        .navigationBar(
+            model: NavigationBarModel(
+                type: .home(title: Localized.EventsListView.events),
+                trailingButtonAction: trailingButtonAction
+            )
         )
     }
 
